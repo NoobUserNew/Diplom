@@ -1,0 +1,13 @@
+.container {
+    width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center all elements horizontally */
+    gap: 20px; /* Space between elements */
+}
+
+.container > * {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
