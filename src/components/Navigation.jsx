@@ -2,20 +2,20 @@ import React from "react";
 import styles from "../styles/Navigation.module.scss";
 
 function Navigation() {
-    return(
-        <>
-            <nav>
-                <a href="">О нас</a>
-                <a href="">Предприятия</a>
-                <a href="">Продукция</a>
-                <a href="">Лаборатория</a>
-                <a href="">Контакты</a>
-                <a href="">Электронное обращение</a>
-                <a href="">Новости</a>
-                <a href="">Прайс-лист</a>
+    return (
+        <div className={styles.container}>
+            <nav className={styles.nav}>
+                <a href="/about">О нас</a>
+                <a href="/enterprises">Предприятия</a>
+                <a href="/products">Продукция</a>
+                <a href="/laboratory">Лаборатория</a>
+                <a href="/contacts">Контакты</a>
+                <a href="/feedback">Электронное обращение</a>
+                <a href="/news">Новости</a>
+                <a href="/price-list">Прайс-лист</a>
             </nav>
-        </>
+        </div>
     );
 }
 
-export default Navigation
+export default Navigation;
