@@ -1,7 +1,22 @@
-.container {
-    margin: 0 auto;
-    .nav {
-        display: flex;
-        gap: 20px;
-    }
+.nav {
+    width: 1440px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 50px;
+    background-color: #bb8a27;
+    padding: 10px 0;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav a:hover {
+    background-color: #906a1d;
 }
