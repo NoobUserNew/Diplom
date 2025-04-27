@@ -1,0 +1,33 @@
+.hero {
+    width: 100%;
+    height: 400px;
+    // background-image: url('/img/hero-bg.jpg'); /* Absolute path for public folder */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+.content {
+    max-width: 800px;
+}
+
+.ctaButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ctaButton:hover {
+    background-color: #0056b3;
+}
