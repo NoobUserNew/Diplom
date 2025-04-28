@@ -1,12 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 function PriceList() {
     return (
-        <>
-            <h1>Прайс-лист</h1>
-            <Link className="text-blue-600" to="/">На главную</Link>
-        </>
+        <div className="bg-light text-dark">
+            <div className="container my-5">
+                <Header />
+                <h1>Прайс-лист</h1>
+            </div>
+        </div>
     );
 }
 
