@@ -12,7 +12,7 @@ export default function Admin() {
     const [description, setDescription] = useState('');
     const [slides, setSlides] = useState([]);
     const [editingSlide, setEditingSlide] = useState(null);
-
+    const [successMessage, setSuccessMessage] = useState('');
 
     const fetchSlides = async () => {
         const res = await fetch('http://localhost:5000/api/slides');
@@ -36,11 +36,13 @@ export default function Admin() {
         setType('enterprises');
         setDescription('');
         fetchSlides();
+        showSuccess('Слайд успешно добавлен!');
     };
 
     const handleDelete = async (id) => {
         await fetch(`http://localhost:5000/api/slides/${id}`, { method: 'DELETE' });
         await fetchSlides();
+        showSuccess('Слайд успешно удален!');
     };
 
     const handleUpdate = async (e) => {
@@ -50,25 +52,26 @@ export default function Admin() {
         await fetch(`http://localhost:5000/api/slides/${editingSlide.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                title: editingSlide.title,
-                imageUrl: editingSlide.imageUrl,
-                type: editingSlide.type,
-                description: editingSlide.description || '', // <-- добавляем описание
-            }),
+            body: JSON.stringify(editingSlide),
         });
 
         setEditingSlide(null);
         fetchSlides();
+        showSuccess('Слайд успешно обновлен!');
+    };
+
+    const showSuccess = (message) => {
+        setSuccessMessage(message);
+        setTimeout(() => setSuccessMessage(''), 3000);
     };
 
     const renderSlider = (type) => (
         <>
-            <h2 className="text-xl font-bold mt-8 mb-4">{type === 'enterprises' ? 'Предприятия' : type === 'products' ? 'Продукция' : 'Новости'}</h2>
+            <h2 className="mt-5 mb-3">{type === 'enterprises' ? 'Предприятия' : type === 'products' ? 'Продукция' : 'Новости'}</h2>
             <Swiper
                 navigation={true}
                 modules={[Navigation]}
-                className="mb-8"
+                className="mb-5"
                 slidesPerView={1}
                 spaceBetween={20}
                 breakpoints={{
@@ -80,39 +83,15 @@ export default function Admin() {
                     .filter((slide) => slide.type === type)
                     .map((slide) => (
                         <SwiperSlide key={slide.id}>
-                            <div className="border p-4 rounded shadow relative">
-                                <img src={slide.imageUrl} alt={slide.title} className="w-full h-32 object-cover mb-2 rounded" />
-
-                                {/* Заголовок */}
-                                {type === 'news' ? (
-                                    <Link to={`/news/${slide.id}`} className="font-semibold text-lg text-blue-600 hover:underline">
-                                        {slide.title}
-                                    </Link>
-                                ) : (
-                                    <h3 className="font-semibold text-lg">{slide.title}</h3>
-                                )}
-
-                                {/* Описание */}
-                                {slide.description && (
-                                    <p className="text-sm text-gray-600 mt-1">{slide.description}</p>
-                                )}
-
-                                {/* Тип */}
-                                <p className="text-xs text-gray-500 mt-1">Тип: {slide.type}</p>
-
-                                {/* Кнопки удалить и редактировать */}
-                                <button
-                                    onClick={() => handleDelete(slide.id)}
-                                    className="mt-2 bg-red-500 text-white px-3 py-1 rounded absolute top-2 right-2"
-                                >
-                                    Удалить
-                                </button>
-                                <button
-                                    onClick={() => setEditingSlide(slide)}
-                                    className="mt-2 bg-yellow-500 text-white px-3 py-1 rounded ml-2"
-                                >
-                                    Редактировать
-                                </button>
+                            <div className="card shadow-sm">
+                                <img src={slide.imageUrl} alt={slide.title} className="card-img-top" style={{ height: '200px', objectFit: 'cover' }} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{slide.title}</h5>
+                                    {slide.description && <p className="card-text">{slide.description}</p>}
+                                    <p className="text-muted" style={{ fontSize: '0.8rem' }}>Тип: {slide.type}</p>
+                                    <button className="btn btn-danger btn-sm me-2" onClick={() => handleDelete(slide.id)}>Удалить</button>
+                                    <button className="btn btn-warning btn-sm" onClick={() => setEditingSlide(slide)} data-bs-toggle="modal" data-bs-target="#editModal">Редактировать</button>
+                                </div>
                             </div>
                         </SwiperSlide>
                     ))}
@@ -121,92 +100,110 @@ export default function Admin() {
     );
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Админ-панель</h1>
-            <Link className="text-blue-600" to="/">На главную</Link>
+        <div className="container my-5">
+            <h1 className="mb-4">Админ-панель</h1>
+            <Link to="/" className="btn btn-link mb-3">На главную</Link>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <input
-                    type="text"
-                    placeholder="Название"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="border p-2 w-full"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="URL изображения"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    className="border p-2 w-full"
-                    required
-                />
-                <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    className="border p-2 w-full"
-                >
-                    <option value="enterprises">Предприятия</option>
-                    <option value="products">Продукция</option>
-                    <option value="news">Новости</option>
-                </select>
-                <textarea
-                    placeholder="Описание (для новостей)"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="border p-2 w-full"
-                ></textarea>
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-                    Добавить слайд
-                </button>
-            </form>
-            {editingSlide && (
-                <form onSubmit={handleUpdate} className="space-y-4 mt-8 border-t pt-4">
-                    <h2 className="text-xl font-bold">Редактировать слайд</h2>
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+
+            <form onSubmit={handleSubmit} className="row g-3 mb-5">
+                <div className="col-md-6">
                     <input
                         type="text"
+                        className="form-control"
                         placeholder="Название"
-                        value={editingSlide.title}
-                        onChange={(e) => setEditingSlide({ ...editingSlide, title: e.target.value })}
-                        className="border p-2 w-full"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         required
                     />
+                </div>
+                <div className="col-md-6">
                     <input
                         type="text"
+                        className="form-control"
                         placeholder="URL изображения"
-                        value={editingSlide.imageUrl}
-                        onChange={(e) => setEditingSlide({ ...editingSlide, imageUrl: e.target.value })}
-                        className="border p-2 w-full"
+                        value={imageUrl}
+                        onChange={(e) => setImageUrl(e.target.value)}
                         required
                     />
+                </div>
+                <div className="col-md-4">
                     <select
-                        value={editingSlide.type}
-                        onChange={(e) => setEditingSlide({ ...editingSlide, type: e.target.value })}
-                        className="border p-2 w-full"
+                        className="form-select"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
                     >
                         <option value="enterprises">Предприятия</option>
                         <option value="products">Продукция</option>
                         <option value="news">Новости</option>
                     </select>
+                </div>
+                <div className="col-md-8">
                     <textarea
+                        className="form-control"
                         placeholder="Описание (для новостей)"
-                        value={editingSlide.description || ''}
-                        onChange={(e) => setEditingSlide({ ...editingSlide, description: e.target.value })}
-                        className="border p-2 w-full"
-                    />
-                    <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-                        Сохранить изменения
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setEditingSlide(null)}
-                        className="ml-2 bg-gray-500 text-white px-4 py-2 rounded"
-                    >
-                        Отмена
-                    </button>
-                </form>
-            )}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    ></textarea>
+                </div>
+                <div className="col-12">
+                    <button type="submit" className="btn btn-primary">Добавить слайд</button>
+                </div>
+            </form>
+
+            {/* Modal */}
+            <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        {editingSlide && (
+                            <form onSubmit={handleUpdate}>
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="editModalLabel">Редактировать слайд</h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setEditingSlide(null)}></button>
+                                </div>
+                                <div className="modal-body">
+                                    <input
+                                        type="text"
+                                        className="form-control mb-3"
+                                        placeholder="Название"
+                                        value={editingSlide.title}
+                                        onChange={(e) => setEditingSlide({ ...editingSlide, title: e.target.value })}
+                                        required
+                                    />
+                                    <input
+                                        type="text"
+                                        className="form-control mb-3"
+                                        placeholder="URL изображения"
+                                        value={editingSlide.imageUrl}
+                                        onChange={(e) => setEditingSlide({ ...editingSlide, imageUrl: e.target.value })}
+                                        required
+                                    />
+                                    <select
+                                        className="form-select mb-3"
+                                        value={editingSlide.type}
+                                        onChange={(e) => setEditingSlide({ ...editingSlide, type: e.target.value })}
+                                    >
+                                        <option value="enterprises">Предприятия</option>
+                                        <option value="products">Продукция</option>
+                                        <option value="news">Новости</option>
+                                    </select>
+                                    <textarea
+                                        className="form-control"
+                                        placeholder="Описание"
+                                        value={editingSlide.description || ''}
+                                        onChange={(e) => setEditingSlide({ ...editingSlide, description: e.target.value })}
+                                    ></textarea>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => setEditingSlide(null)}>Отмена</button>
+                                    <button type="submit" className="btn btn-success" data-bs-dismiss="modal">Сохранить</button>
+                                </div>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            </div>
+
             {renderSlider('enterprises')}
             {renderSlider('products')}
             {renderSlider('news')}

@@ -5,7 +5,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
-import Nav from '../components/Navigation';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function Home() {
     const [slides, setSlides] = useState([]);
@@ -34,7 +35,12 @@ export default function Home() {
                 .map((slide) => (
                     <SwiperSlide key={slide.id}>
                         <div className="border p-4 rounded shadow relative">
-                            <img src={slide.imageUrl} alt={slide.title} className="w-full h-32 object-cover mb-2 rounded" />
+                            <img
+                                src={slide.imageUrl}
+                                alt={slide.title}
+                                className="img-fluid rounded mb-2"
+                                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                            />
                             <br />
                             {/* Заголовок */}
                             {type === 'news' ? (
@@ -42,16 +48,13 @@ export default function Home() {
                                     {slide.title}
                                 </Link>
                             ) : (
-                                <h3 className="font-semibold text-lg">{slide.title}</h3>
+                                <h3 className="font-semibold text-lg">{slide.title.length > 50 ? slide.title.slice(0, 50) + '...' : slide.title}</h3>
                             )}
 
                             {/* Описание */}
                             {slide.description && (
-                                <p className="text-sm text-gray-600 mt-1">{slide.description}</p>
+                                <p className="text-muted small">{slide.description.length > 40 ? slide.description.slice(0, 40) + '...' : slide.description}</p>
                             )}
-
-                            {/* Тип */}
-                            <p className="text-xs text-gray-500 mt-1">Тип: {slide.type}</p>
                         </div>
                     </SwiperSlide>
                 ))}
@@ -59,18 +62,42 @@ export default function Home() {
     );
 
     return (
-        <div className="p-4">
-            <Nav />
-            <h1 className="text-2xl font-bold mb-6">Главная страница</h1>
+        <div className="bg-light text-dark">
+            <div className="container py-5">
+                <Header/>
+                <section className="text-center mb-5">
+                    <h1 className="mb-3 text-warning">О компании</h1>
+                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
+                        Наша компания специализируется на производстве высококачественной продукции для различных отраслей.
+                    </p>
+                    <Link to="/about" className="btn btn-outline-warning mt-3">Узнать больше</Link>
+                </section>
 
-            <h2 className="text-xl font-semibold mb-4">Наши предприятия</h2>
-            {renderSlider('enterprises')}
+                <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
+                    <h2 className="mb-3 text-warning">Предприятия</h2>
+                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
+                        Познакомьтесь с нашими предприятиями и производственными мощностями.
+                    </p>
+                    {renderSlider('enterprises')}
+                </section>
 
-            <h2 className="text-xl font-semibold mb-4">Наша продукция</h2>
-            {renderSlider('products')}
+                <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
+                    <h2 className="mb-3 text-warning">Продукция</h2>
+                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
+                        Ознакомьтесь с широким ассортиментом нашей продукции.
+                    </p>
+                    {renderSlider('products')}
+                </section>
 
-            <h2 className="text-xl font-semibold mb-4">Новости</h2>
-            {renderSlider('news')}
+                <section className="text-center mb-5 bg-warning-subtle">
+                    <h2 className="mb-3 text-warning">Новости</h2>
+                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
+                        Последние события и достижения нашей компании.
+                    </p>
+                    {renderSlider('news')}
+                </section>
+                <Footer/>
+            </div>
         </div>
     );
 }
