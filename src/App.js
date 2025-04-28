@@ -9,6 +9,7 @@ import News from './pages/News';
 import PriceList from './pages/PriceList';
 import Admin from './pages/Admin';
 import Home from './pages/Home';
+import NewsDetail from './pages/NewsDetail';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/pricelist" element={<PriceList />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/news/:id" element={<NewsDetail />} />
       </Routes>
     </Router>
   );

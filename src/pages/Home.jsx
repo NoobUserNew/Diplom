@@ -33,21 +33,25 @@ export default function Home() {
                 .filter((slide) => slide.type === type)
                 .map((slide) => (
                     <SwiperSlide key={slide.id}>
-                        <div className="border rounded-lg overflow-hidden shadow-lg">
-                            <img src={slide.imageUrl} alt={slide.title} className="w-full h-48 object-cover" />
-                            <div className="p-4">
-                                {/* Если это новости - показываем текст и делаем ссылку */}
-                                {type === 'news' ? (
-                                    <>
-                                        <Link to="/news" className="text-lg font-bold text-blue-600 hover:underline">
-                                            {slide.title}
-                                        </Link>
-                                        <p className="text-sm text-gray-700 mt-2">{slide.description}</p>
-                                    </>
-                                ) : (
-                                    <h2 className="text-lg font-bold">{slide.title}</h2>
-                                )}
-                            </div>
+                        <div className="border p-4 rounded shadow relative">
+                            <img src={slide.imageUrl} alt={slide.title} className="w-full h-32 object-cover mb-2 rounded" />
+                            <br />
+                            {/* Заголовок */}
+                            {type === 'news' ? (
+                                <Link to={`/news/${slide.id}`} className="font-semibold text-lg text-blue-600 hover:underline">
+                                    {slide.title}
+                                </Link>
+                            ) : (
+                                <h3 className="font-semibold text-lg">{slide.title}</h3>
+                            )}
+
+                            {/* Описание */}
+                            {slide.description && (
+                                <p className="text-sm text-gray-600 mt-1">{slide.description}</p>
+                            )}
+
+                            {/* Тип */}
+                            <p className="text-xs text-gray-500 mt-1">Тип: {slide.type}</p>
                         </div>
                     </SwiperSlide>
                 ))}

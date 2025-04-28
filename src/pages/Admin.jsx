@@ -82,11 +82,25 @@ export default function Admin() {
                         <SwiperSlide key={slide.id}>
                             <div className="border p-4 rounded shadow relative">
                                 <img src={slide.imageUrl} alt={slide.title} className="w-full h-32 object-cover mb-2 rounded" />
-                                <h3 className="font-semibold text-lg">{slide.title}</h3>
+
+                                {/* Заголовок */}
+                                {type === 'news' ? (
+                                    <Link to={`/news/${slide.id}`} className="font-semibold text-lg text-blue-600 hover:underline">
+                                        {slide.title}
+                                    </Link>
+                                ) : (
+                                    <h3 className="font-semibold text-lg">{slide.title}</h3>
+                                )}
+
+                                {/* Описание */}
                                 {slide.description && (
                                     <p className="text-sm text-gray-600 mt-1">{slide.description}</p>
                                 )}
+
+                                {/* Тип */}
                                 <p className="text-xs text-gray-500 mt-1">Тип: {slide.type}</p>
+
+                                {/* Кнопки удалить и редактировать */}
                                 <button
                                     onClick={() => handleDelete(slide.id)}
                                     className="mt-2 bg-red-500 text-white px-3 py-1 rounded absolute top-2 right-2"
@@ -99,11 +113,9 @@ export default function Admin() {
                                 >
                                     Редактировать
                                 </button>
-
                             </div>
                         </SwiperSlide>
                     ))}
-
             </Swiper>
         </>
     );
