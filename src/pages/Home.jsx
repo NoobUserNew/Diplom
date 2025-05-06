@@ -44,7 +44,7 @@ export default function Home() {
                             <br />
                             {/* Заголовок */}
                             {type === 'news' ? (
-                                <Link to={`/news/${slide.id}`} className="font-semibold text-lg text-blue-600 hover:underline">
+                                <Link to={`/news/${slide.id}`} style={{color: '#212529', textDecoration: 'none', fontWeight: 600, fontSize: '24px'}}>
                                     {slide.title}
                                 </Link>
                             ) : (
