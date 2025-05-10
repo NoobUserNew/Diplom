@@ -25,6 +25,9 @@ export default function Header() {
         {/* Меню */}
         <div className="collapse navbar-collapse" id="navbarContent">
           <div className="ms-auto d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3 mt-3 mt-lg-0">
+          <Link to="/" className="text-warning" style={{ textDecoration: 'none' }}>
+              Главная
+            </Link>
             <Link to="/about" className="text-warning" style={{ textDecoration: 'none' }}>
               О нас
             </Link>
@@ -40,15 +43,15 @@ export default function Header() {
             <Link to="/contacts" className="text-warning" style={{ textDecoration: 'none' }}>
               Контакты
             </Link>
-            <Link to="/feedback" className="text-warning" style={{ textDecoration: 'none' }}>
+            {/* <Link to="/feedback" className="text-warning" style={{ textDecoration: 'none' }}>
               Электронное обращение
-            </Link>
+            </Link> */}
             <Link to="/news" className="text-warning" style={{ textDecoration: 'none' }}>
               Новости
             </Link>
-            <Link to="/pricelist" className="text-warning" style={{ textDecoration: 'none' }}>
+            {/* <Link to="/pricelist" className="text-warning" style={{ textDecoration: 'none' }}>
               Прайс-лист
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

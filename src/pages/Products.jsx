@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, Row, Col, Container } from 'react-bootstrap';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function Products() {
     const [slides, setSlides] = useState([]);
@@ -65,6 +66,7 @@ export default function Products() {
                         ))}
                     </Row>
                 </Container>
+                <Footer/>
             </div>
         </div>
     );

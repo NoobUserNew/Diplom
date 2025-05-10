@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { Form, Button } from 'react-bootstrap';
 
 export default function Admin() {
     const [title, setTitle] = useState('');
@@ -14,18 +16,77 @@ export default function Admin() {
     const [editingSlide, setEditingSlide] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
 
+    const [enterprises, setEnterprises] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [news, setNews] = useState([]);
+    const [error, setError] = useState(null);
+    const [activeTab, setActiveTab] = useState('enterprises');
+    const [showModal, setShowModal] = useState(false);
+    const [editItem, setEditItem] = useState(null);
+
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Проверяем токен при загрузке
+    const [loginData, setLoginData] = useState({ username: '', password: '' });
+    const [showLogin, setShowLogin] = useState(!isAuthenticated);
+
     const fetchSlides = async () => {
-        const res = await fetch('http://localhost:3000/sliders');
-        const data = await res.json();
-        setSlides(data);
+        if (!isAuthenticated) return;
+        try {
+            const res = await fetch('http://localhost:3000/sliders', {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+            });
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status} - ${res.statusText}`);
+            }
+            const data = await res.json();
+            setSlides(data);
+        } catch (err) {
+            console.error('Fetch error:', err);
+            setError(`Ошибка загрузки слайдов: ${err.message}`);
+        }
     };
 
     useEffect(() => {
-        fetchSlides();
-    }, []);
+        if (isAuthenticated) {
+            fetchSlides();
+        }
+    }, [isAuthenticated]);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginData),
+            });
+            if (!response.ok) throw new Error('Login failed');
+            const data = await response.json();
+            if (data.success) {
+                localStorage.setItem('token', data.token || 'dummy-token'); // Сохраняем токен
+                setIsAuthenticated(true);
+                setShowLogin(false);
+                fetchSlides(); // Загружаем слайды после авторизации
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Ошибка авторизации. Проверьте логин и пароль.');
+        }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setIsAuthenticated(false);
+        setShowLogin(true);
+        setSlides([]);
+        setEnterprises([]);
+        setProducts([]);
+        setNews([]);
+        setError(null);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!isAuthenticated) return;
 
         if (!title || !imageUrl) {
             setSuccessMessage('Заполните обязательные поля: Название и URL изображения');
@@ -37,19 +98,19 @@ export default function Admin() {
         if (type === 'enterprise') {
             entityResponse = await fetch('http://localhost:3000/enterprises', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ name: title, image_url: imageUrl, description, slug: title.toLowerCase().replace(/\s+/g, '-') }),
             });
         } else if (type === 'product') {
             entityResponse = await fetch('http://localhost:3000/products', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: title, image_url: imageUrl, description, slug: title.toLowerCase().replace(/\s+/g, '-'), enterprise_id: null }),
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: JSON.stringify({ name: title, image_url: imageUrl }),
             });
         } else if (type === 'news') {
             entityResponse = await fetch('http://localhost:3000/news', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ title, image_url: imageUrl, short_description: description, full_text: description, slug: title.toLowerCase().replace(/\s+/g, '-') }),
             });
         }
@@ -63,12 +124,11 @@ export default function Admin() {
             return;
         }
 
-        // Задержка перед созданием слайда (увеличиваем до 200 мс)
         await new Promise(resolve => setTimeout(resolve, 200));
 
         const sliderResponse = await fetch('http://localhost:3000/sliders', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: JSON.stringify({ type, ref_id: refId, position: slides.length + 1 }),
         });
 
@@ -86,37 +146,40 @@ export default function Admin() {
     };
 
     const handleDelete = async (id) => {
-        await fetch(`http://localhost:3000/sliders/${id}`, { method: 'DELETE' });
+        if (!isAuthenticated) return;
+        await fetch(`http://localhost:3000/sliders/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        });
         await fetchSlides();
         showSuccess('Слайд успешно удален!');
     };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        if (!editingSlide) return;
+        if (!isAuthenticated || !editingSlide) return;
 
         const originalType = slides.find(slide => slide.id === editingSlide.id)?.type;
         let newRefId = editingSlide.ref_id;
 
-        // Если тип изменился, создаем новую запись и удаляем старую
         if (originalType !== editingSlide.type) {
             let entityResponse;
             if (editingSlide.type === 'enterprise') {
                 entityResponse = await fetch('http://localhost:3000/enterprises', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: JSON.stringify({ name: editingSlide.title, image_url: editingSlide.imageUrl, description: editingSlide.description, slug: editingSlide.title.toLowerCase().replace(/\s+/g, '-') }),
                 });
             } else if (editingSlide.type === 'product') {
                 entityResponse = await fetch('http://localhost:3000/products', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: editingSlide.title, image_url: editingSlide.imageUrl, description: editingSlide.description, slug: editingSlide.title.toLowerCase().replace(/\s+/g, '-'), enterprise_id: null }),
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: JSON.stringify({ name: editingSlide.title, image_url: editingSlide.imageUrl }),
                 });
             } else if (editingSlide.type === 'news') {
                 entityResponse = await fetch('http://localhost:3000/news', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: JSON.stringify({ title: editingSlide.title, image_url: editingSlide.imageUrl, short_description: editingSlide.description, full_text: editingSlide.description, slug: editingSlide.title.toLowerCase().replace(/\s+/g, '-') }),
                 });
             }
@@ -125,16 +188,23 @@ export default function Admin() {
                 const entityData = await entityResponse.json();
                 newRefId = entityData.id;
 
-                // Задержка перед удалением старой записи (увеличиваем до 200 мс)
                 await new Promise(resolve => setTimeout(resolve, 200));
 
-                // Удаляем старую запись
                 if (originalType === 'enterprise') {
-                    await fetch(`http://localhost:3000/enterprises/${editingSlide.ref_id}`, { method: 'DELETE' });
+                    await fetch(`http://localhost:3000/enterprises/${editingSlide.ref_id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    });
                 } else if (originalType === 'product') {
-                    await fetch(`http://localhost:3000/products/${editingSlide.ref_id}`, { method: 'DELETE' });
+                    await fetch(`http://localhost:3000/products/${editingSlide.ref_id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    });
                 } else if (originalType === 'news') {
-                    await fetch(`http://localhost:3000/news/${editingSlide.ref_id}`, { method: 'DELETE' });
+                    await fetch(`http://localhost:3000/news/${editingSlide.ref_id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    });
                 }
             } else {
                 const error = await entityResponse.json();
@@ -142,35 +212,32 @@ export default function Admin() {
                 return;
             }
         } else {
-            // Если тип не изменился, просто обновляем существующую запись
             if (editingSlide.type === 'enterprise') {
                 await fetch(`http://localhost:3000/enterprises/${editingSlide.ref_id}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: JSON.stringify({ name: editingSlide.title, image_url: editingSlide.imageUrl, description: editingSlide.description, slug: editingSlide.title.toLowerCase().replace(/\s+/g, '-') }),
                 });
             } else if (editingSlide.type === 'product') {
                 await fetch(`http://localhost:3000/products/${editingSlide.ref_id}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: editingSlide.title, image_url: editingSlide.imageUrl, description: editingSlide.description, slug: editingSlide.title.toLowerCase().replace(/\s+/g, '-'), enterprise_id: null }),
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: JSON.stringify({ name: editingSlide.title, image_url: editingSlide.imageUrl }),
                 });
             } else if (editingSlide.type === 'news') {
                 await fetch(`http://localhost:3000/news/${editingSlide.ref_id}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: JSON.stringify({ title: editingSlide.title, image_url: editingSlide.imageUrl, short_description: editingSlide.description, full_text: editingSlide.description, slug: editingSlide.title.toLowerCase().replace(/\s+/g, '-') }),
                 });
             }
         }
 
-        // Задержка перед обновлением слайда (увеличиваем до 200 мс)
         await new Promise(resolve => setTimeout(resolve, 200));
 
-        // Обновляем сам слайд
         const sliderResponse = await fetch(`http://localhost:3000/sliders/${editingSlide.id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: JSON.stringify({ type: editingSlide.type, ref_id: newRefId, position: editingSlide.position }),
         });
 
@@ -223,12 +290,34 @@ export default function Admin() {
         </>
     );
 
+    if (showLogin) {
+        return (
+            <div className="container my-5">
+                <h1 className="mb-4 text-center">Вход в админ-панель</h1>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <Form onSubmit={handleLogin}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Логин</Form.Label>
+                        <Form.Control type="text" value={loginData.username} onChange={(e) => setLoginData({ ...loginData, username: e.target.value })} required />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Пароль</Form.Label>
+                        <Form.Control type="password" value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} required />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">Войти</Button>
+                </Form>
+            </div>
+        );
+    }
+
     return (
         <div className="container my-5">
             <h1 className="mb-4">Админ-панель</h1>
             <Link to="/" className="btn btn-link mb-3">На главную</Link>
+            <Button variant="danger" onClick={handleLogout} className="mb-3 ms-2">Выход</Button>
 
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            {error && <div className="alert alert-danger">{error}</div>}
 
             <form onSubmit={handleSubmit} className="row g-3 mb-5">
                 <div className="col-md-6">
@@ -265,7 +354,7 @@ export default function Admin() {
                 <div className="col-md-8">
                     <textarea
                         className="form-control"
-                        placeholder="Описание (для новостей и предприя)"
+                        placeholder="Описание (для новостей и предприятий)"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     ></textarea>

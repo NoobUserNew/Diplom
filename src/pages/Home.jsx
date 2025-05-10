@@ -4,13 +4,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper/modules';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+
 export default function Home() {
     const [slides, setSlides] = useState([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
         fetch('http://localhost:3000/sliders')
             .then((res) => res.json())
@@ -79,6 +80,12 @@ export default function Home() {
                         Познакомьтесь с нашими предприятиями и производственными мощностями.
                     </p>
                     {renderSlider('enterprise')} {/* Обновляем тип */}
+                    <button
+                        className="bg-light btn btn-outline-warning mt-3"
+                        onClick={() => navigate(`/enterprises/`)}
+                    >
+                        Подробнее
+                    </button>
                 </section>
 
                 <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
@@ -87,14 +94,26 @@ export default function Home() {
                         Ознакомьтесь с широким ассортиментом нашей продукции.
                     </p>
                     {renderSlider('product')} {/* Обновляем тип */}
+                    <button
+                        className="bg-light btn btn-outline-warning mt-3"
+                        onClick={() => navigate(`/products/`)}
+                    >
+                        Подробнее
+                    </button>
                 </section>
 
-                <section className="text-center mb-5 bg-warning-subtle">
+                <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
                     <h2 className="mb-3 text-warning">Новости</h2>
                     <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
                         Последние события и достижения нашей компании.
                     </p>
                     {renderSlider('news')}
+                    <button
+                        className="bg-light btn btn-outline-warning mt-3"
+                        onClick={() => navigate(`/news/`)}
+                    >
+                        Подробнее
+                    </button>
                 </section>
                 <Footer />
             </div>

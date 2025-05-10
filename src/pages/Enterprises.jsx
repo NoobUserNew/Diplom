@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function Enterprises() {
     const [slides, setSlides] = useState([]);
@@ -69,6 +70,7 @@ export default function Enterprises() {
                         </div>
                     ))}
                 </div>
+                <Footer/>
             </div>
         </div>
     );
