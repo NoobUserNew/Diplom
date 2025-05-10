@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Contacts() {
     return (
@@ -7,6 +8,7 @@ function Contacts() {
             <div className="container my-5">
                 <Header />
                 <h1>Контакты</h1>
+                <Footer/>
             </div>
         </div>
     );
