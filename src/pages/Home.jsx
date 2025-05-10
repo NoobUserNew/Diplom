@@ -12,7 +12,7 @@ export default function Home() {
     const [slides, setSlides] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/slides')
+        fetch('http://localhost:3000/sliders')
             .then((res) => res.json())
             .then((data) => setSlides(data));
     }, []);
@@ -20,7 +20,7 @@ export default function Home() {
     const renderSlider = (type) => (
         <Swiper
             pagination={{ clickable: true }}
-            navigation={true} // === Кнопки навигации влево/вправо
+            navigation={true}
             modules={[Pagination, Navigation]}
             className="my-8"
             slidesPerView={1}
@@ -42,16 +42,16 @@ export default function Home() {
                                 style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                             />
                             <br />
-                            {/* Заголовок */}
                             {type === 'news' ? (
-                                <Link to={`/news/${slide.id}`} style={{color: '#212529', textDecoration: 'none', fontWeight: 600, fontSize: '24px'}}>
-                                    {slide.title}
-                                </Link>
+                                <h3 className="font-semibold text-lg">
+                                    <Link to={`/news/${slide.id}`} style={{ color: '#212529', textDecoration: 'none', fontWeight: 600, fontSize: '24px' }}>
+                                        {slide.title.length > 50 ? slide.title.slice(0, 22) + '...' : slide.title}
+                                    </Link>
+                                </h3>
                             ) : (
-                                <h3 className="font-semibold text-lg">{slide.title.length > 50 ? slide.title.slice(0, 50) + '...' : slide.title}</h3>
+                                <h3 className="font-semibold text-lg">{slide.title.length > 50 ? slide.title.slice(0, 22) + '...' : slide.title}</h3>
                             )}
 
-                            {/* Описание */}
                             {slide.description && (
                                 <p className="text-muted small">{slide.description.length > 40 ? slide.description.slice(0, 40) + '...' : slide.description}</p>
                             )}
@@ -64,7 +64,7 @@ export default function Home() {
     return (
         <div className="bg-light text-dark">
             <div className="container py-5">
-                <Header/>
+                <Header />
                 <section className="text-center mb-5">
                     <h1 className="mb-3 text-warning">О компании</h1>
                     <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
@@ -78,7 +78,7 @@ export default function Home() {
                     <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
                         Познакомьтесь с нашими предприятиями и производственными мощностями.
                     </p>
-                    {renderSlider('enterprises')}
+                    {renderSlider('enterprise')} {/* Обновляем тип */}
                 </section>
 
                 <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
@@ -86,7 +86,7 @@ export default function Home() {
                     <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
                         Ознакомьтесь с широким ассортиментом нашей продукции.
                     </p>
-                    {renderSlider('products')}
+                    {renderSlider('product')} {/* Обновляем тип */}
                 </section>
 
                 <section className="text-center mb-5 bg-warning-subtle">
@@ -96,7 +96,7 @@ export default function Home() {
                     </p>
                     {renderSlider('news')}
                 </section>
-                <Footer/>
+                <Footer />
             </div>
         </div>
     );
