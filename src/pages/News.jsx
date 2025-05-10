@@ -5,25 +5,38 @@ import Header from '../components/Header';
 
 export default function News() {
     const [slides, setSlides] = useState([]);
+    const [error, setError] = useState(null);
 
     const fetchSlides = async () => {
-        const res = await fetch('http://localhost:5000/api/slides');
-        const data = await res.json();
-        setSlides(data);
+        try {
+            const res = await fetch('http://localhost:3000/sliders');
+            if (!res.ok) {
+                throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            const data = await res.json();
+            const newsSlides = data.filter(slide => slide.type === 'news');
+            newsSlides.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setSlides(newsSlides.slice(0, 7));
+            setError(null);
+        } catch (err) {
+            console.error('Failed to fetch slides:', err);
+            setError('Не удалось загрузить данные. Проверьте, работает ли сервер.');
+        }
     };
 
     useEffect(() => {
         fetchSlides();
     }, []);
 
-    const newsSlides = slides.filter(slide => slide.type === 'news');
+    const newsSlides = slides;
 
     return (
         <div className='bg-light text-dark'>
             <div className='container my-5'>
-                <Header/>
+                <Header />
                 <Container className="my-5">
                     <h1 className="mb-4 text-center">Новости</h1>
+                    {error && <div className="alert alert-danger">{error}</div>}
                     <Row>
                         {newsSlides.map((slide) => (
                             <Col key={slide.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
@@ -35,7 +48,11 @@ export default function News() {
                                         alt={slide.title}
                                     />
                                     <Card.Body className="d-flex flex-column">
-                                        <Card.Title className="text-truncate" title={slide.title}>
+                                        <Card.Title
+                                            className="text-truncate"
+                                            title={slide.title}
+                                            style={{ wordBreak: 'break-word' }} // Добавляем перенос слов
+                                        >
                                             {slide.title.length > 30 ? slide.title.substring(0, 30) + '...' : slide.title}
                                         </Card.Title>
                                         {slide.description && (
