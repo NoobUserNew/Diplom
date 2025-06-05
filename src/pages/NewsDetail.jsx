@@ -32,7 +32,7 @@ export default function NewsDetail() {
 	if (error) {
 		return (
 			<div className={styles.newsContainer}>
-				<Link className={styles.backLink} to='/'>
+				<Link className={styles.backLink} to='/news'>
 					← Назад
 				</Link>
 				<div className={styles.errorBox}>{error}</div>

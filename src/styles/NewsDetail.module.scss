@@ -4,7 +4,7 @@
 .newsContainer {
 	max-width: $container-max-width;
 	margin: 0 auto;
-	padding: $section-spacing 1rem;
+	padding: 6rem 1rem;
 	background-color: $background-light;
 	color: $text-dark;
 	border-radius: $border-radius;
@@ -92,7 +92,7 @@
 
 .imageWrapper {
 	width: 100%;
-	max-height: 400px;
+	height: 400px; // Используй фиксированную высоту
 	overflow: hidden;
 	border-radius: $border-radius;
 	margin-bottom: $section-spacing * 1.5;
@@ -100,8 +100,9 @@
 
 	.image {
 		width: 100%;
-		height: auto;
-		object-fit: cover;
+		height: 100%;
+		object-fit: cover; // Заполняет контейнер без искажений
+		object-position: center; // Центрирует картинку
 		transition: transform $transition-speed ease, filter $transition-speed ease;
 		filter: brightness(0.9);
 

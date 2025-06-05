@@ -161,9 +161,10 @@ $desktop-lg: 1440px;
    ====================================== */
 
 .heroSection {
+	padding-top: 5rem;
 	position: relative;
 	width: 100%;
-	height: 60vh;
+	height: 70vh;
 	min-height: 400px;
 	background-image: url('./background.png');
 	background-size: cover;
