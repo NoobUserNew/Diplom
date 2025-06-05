@@ -1,0 +1,217 @@
+@import './variables.scss';
+
+.cardWrapper {
+	perspective: 1200px;
+	cursor: default;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	height: 100%; // чтобы обёртка заполняла всю высоту grid-ячейки
+}
+
+.card {
+	position: relative;
+	background-color: $white;
+	border-radius: $border-radius;
+	box-shadow: 0 0.5rem 1rem rgba($shadow-light, 0.6);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	height: 100%; // чтобы карточка растягивалась по высоте родителя
+	flex: 1; // занимать всё доступное место внутри обёртки
+	transform-style: preserve-3d;
+	transition: transform $transition-speed ease,
+		box-shadow $transition-speed ease;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 6px;
+		height: 100%;
+		background: linear-gradient(180deg, $primary-color, $primary-dark);
+	}
+
+	&:hover {
+		transform: translateY(-10px) rotateX(4deg) rotateY(-4deg) scale(1.03);
+		box-shadow: 0 1rem 2rem rgba($shadow-medium, 0.6);
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: -20%;
+		left: -60%;
+		width: 200%;
+		height: 140%;
+		background: linear-gradient(
+			120deg,
+			rgba($white, 0) 0%,
+			rgba($white, 0.5) 50%,
+			rgba($white, 0) 100%
+		);
+		transform: rotate(25deg) translateX(-100%);
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	&:hover::after {
+		animation: shineOverlay 1s ease-out forwards;
+	}
+}
+
+.imageWrapper {
+	position: relative;
+	width: 100%;
+	padding-top: 56.25%; // 16:9
+	overflow: hidden;
+	background-color: $primary-light;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -150%;
+		width: 50%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			rgba($white, 0) 0%,
+			rgba($white, 0.2) 50%,
+			rgba($white, 0) 100%
+		);
+		animation: shimmer 1.8s infinite;
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform $transition-speed ease, filter $transition-speed ease;
+		filter: brightness(0.9) contrast(1.1);
+	}
+
+	&:hover img {
+		transform: scale(1.1);
+		filter: brightness(1) contrast(1);
+	}
+}
+
+.cardBody {
+	display: flex;
+	flex-direction: column;
+	padding: 1.25rem;
+	flex-grow: 1; // позволяет содержимому занять оставшееся место
+	position: relative;
+	z-index: 1;
+}
+
+.cardTitle {
+	font-size: 1.125rem;
+	color: $primary-dark;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+	text-decoration: none;
+	word-break: break-word;
+	transition: color $transition-speed ease, transform $transition-speed ease;
+	transform-origin: bottom left;
+	opacity: 0;
+	transform: translateY(20px);
+	animation: fadeInUp 0.6s ease-out forwards;
+	animation-delay: 0.2s;
+
+	&:hover {
+		color: $primary-color;
+		transform: translateY(-3px) scale(1.02);
+	}
+}
+
+.cardText {
+	font-size: 0.95rem;
+	color: $text-muted;
+	line-height: 1.6;
+	margin-bottom: 1rem;
+	flex-grow: 1; // чтобы текст занимал доступное пространство
+	opacity: 0;
+	transform: translateY(20px);
+	animation: fadeInUp 0.6s ease-out forwards;
+	animation-delay: 0.3s;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	hyphens: auto;
+}
+
+.cardButton {
+	align-self: flex-start;
+	background: $primary-color;
+	color: $white;
+	border: none;
+	border-radius: $border-radius-sm;
+	padding: 0.6rem 1.4rem;
+	font-size: 0.95rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color $transition-speed ease,
+		box-shadow $transition-speed ease, transform $transition-speed ease;
+	opacity: 0;
+	transform: translateY(20px);
+	animation: fadeInUp 0.6s ease-out forwards;
+	animation-delay: 0.4s;
+
+	&:hover {
+		background: darken($primary-color, 8%);
+		box-shadow: 0 0.5rem 1rem rgba($shadow-medium, 0.5);
+		transform: translateY(-2px);
+	}
+}
+
+/* При очень узких экранах (до $mobile) — карточки централизованы, остаются одной ширины */
+@media (max-width: $mobile) {
+	.cardWrapper {
+		max-width: 300px;
+		margin: 0 auto;
+	}
+}
+
+/* Ключевые кадры анимаций */
+@keyframes fadeInUp {
+	0% {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		transform: translateX(-150%);
+	}
+	50% {
+		transform: translateX(150%);
+	}
+	100% {
+		transform: translateX(150%);
+	}
+}
+
+@keyframes shineOverlay {
+	0% {
+		opacity: 0;
+		transform: rotate(25deg) translateX(-100%);
+	}
+	50% {
+		opacity: 0.15;
+		transform: rotate(25deg) translateX(50%);
+	}
+	100% {
+		opacity: 0;
+		transform: rotate(25deg) translateX(150%);
+	}
+}

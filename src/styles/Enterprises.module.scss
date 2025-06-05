@@ -1,28 +1,11 @@
-/* src/styles/Enterprises.module.scss */
-
-/* Подключаем ваши SCSS-переменные */
-/* Предполагается, что в variables.scss объявлены:
-   $primary-color, $primary-light, $primary-dark,
-   $text-dark, $text-muted, $background-light, $white,
-   $border-color, $shadow-light, $shadow-medium,
-   $container-max-width, $section-spacing, $card-spacing,
-   $border-radius, $border-radius-sm, $transition-speed,
-   $mobile: 480px, $tablet: 768px, $desktop-sm: 1024px, $desktop-md: 1280px, $desktop-lg: 1440px,
-   а также новая переменная $mini-mobile: 330px.
-*/
 @import './variables.scss';
 
-/* ================================= */
-/* 1. ОБЁРТКА ВСЕЙ СТРАНИЦЫ          */
-/* ================================= */
 .pageWrapper {
 	background-color: $background-light;
 	color: $text-dark;
 	min-height: 100vh;
 	overflow-x: hidden;
-	padding: calc($section-spacing * 2) 0;
-
-	/* Нежный перелив цвета по вертикали */
+	padding: 1rem 0;
 	background: linear-gradient(
 		180deg,
 		$background-light 0%,
@@ -32,9 +15,6 @@
 	);
 }
 
-/* ================================= */
-/* 2. ВНУТРЕННИЙ КОНТЕЙНЕР          */
-/* ================================= */
 .innerContainer {
 	max-width: $container-max-width;
 	margin: 0 auto;
@@ -42,25 +22,19 @@
 	position: relative;
 }
 
-/* ================================= */
-/* 3. ОБЩАЯ АНИМАЦИЯ «FADE-IN»        */
-/* ================================= */
 .fadeInSection {
 	opacity: 0;
 	transform: translateY(50px);
 	transition: opacity $transition-speed ease-out,
 		transform $transition-speed ease-out;
 	will-change: opacity, transform;
+
+	&.isVisible {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
-.fadeInSection.isVisible {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-/* ================================= */
-/* 4. СЕКЦИЯ ЗАГОЛОВКА              */
-/* ================================= */
 .topSection {
 	text-align: center;
 	margin-bottom: calc($section-spacing * 2);
@@ -75,8 +49,6 @@
 		opacity: 0;
 		animation: fadeInDown 0.8s ease-out forwards;
 		animation-delay: 0.2s;
-
-		/* Градиентная заливка текста */
 		background: linear-gradient(
 			45deg,
 			$primary-dark,
@@ -86,7 +58,6 @@
 		-webkit-text-fill-color: transparent;
 		text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
 
-		/* Псевдополоса под заголовком */
 		&::after {
 			content: '';
 			position: absolute;
@@ -103,9 +74,6 @@
 	}
 }
 
-/* ================================= */
-/* 5. БЛОК ОШИБКИ ЗАГРУЗКИ           */
-/* ================================= */
 .errorBox {
 	background-color: lighten($primary-color, 45%);
 	color: darken($primary-color, 40%);
@@ -122,9 +90,6 @@
 	animation-delay: 0.5s;
 }
 
-/* ================================= */
-/* 6. СЕТКА КАРТОЧЕК                */
-/* ================================= */
 .cardsGrid {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -139,24 +104,21 @@
 	@media (min-width: $desktop-sm) {
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 	}
+
+	> .cardWrapper:nth-child(2n) .card {
+		background-color: lighten($background-light, 2%);
+	}
 }
 
-/* ================================= */
-/* 7. ОБЁРТКА ОДНОЙ КАРТОЧКИ        */
-/* ================================= */
 .cardWrapper {
-	perspective: 1200px; /* Для 3D-наклона */
+	perspective: 1200px;
 	cursor: default;
 }
 
-/* ================================= */
-/* 8. САМА КАРТОЧКА                */
-/* ================================= */
 .card {
 	position: relative;
 	background-color: $white;
 	border-radius: $border-radius;
-	/* Уменьшили размытость и прозрачность тени */
 	box-shadow: 0 0.5rem 1rem rgba($shadow-light, 0.6);
 	overflow: hidden;
 	display: flex;
@@ -166,7 +128,6 @@
 	transition: transform $transition-speed ease,
 		box-shadow $transition-speed ease;
 
-	/* Акцентная полоса слева */
 	&::before {
 		content: '';
 		position: absolute;
@@ -178,12 +139,10 @@
 	}
 
 	&:hover {
-		/* Снизили интенсивность тени при hover */
 		transform: translateY(-10px) rotateX(4deg) rotateY(-4deg) scale(1.03);
 		box-shadow: 0 1rem 2rem rgba($shadow-medium, 0.6);
 	}
 
-	/* Блеск-оверлей при наведении */
 	&::after {
 		content: '';
 		position: absolute;
@@ -207,17 +166,13 @@
 	}
 }
 
-/* ================================= */
-/* 9. ОБЁРТКА ИЗОБРАЖЕНИЯ           */
-/* ================================= */
 .imageWrapper {
 	position: relative;
 	width: 100%;
-	padding-top: 56.25%; /* 16:9 */
+	padding-top: 56.25%;
 	overflow: hidden;
 	background-color: $primary-light;
 
-	/* Загрузка Shimmer-эффекта */
 	&::before {
 		content: '';
 		position: absolute;
@@ -251,9 +206,6 @@
 	}
 }
 
-/* ================================= */
-/* 10. ТЕЛО КАРТОЧКИ               */
-/* ================================= */
 .cardBody {
 	display: flex;
 	flex-direction: column;
@@ -263,9 +215,6 @@
 	z-index: 1;
 }
 
-/* ================================= */
-/* 11. ЗАГОЛОВОК КАРТОЧКИ          */
-/* ================================= */
 .cardTitle {
 	font-size: 1.125rem;
 	color: $primary-dark;
@@ -286,9 +235,6 @@
 	}
 }
 
-/* ================================= */
-/* 12. ТЕКСТ ОПИСАНИЯ               */
-/* ================================= */
 .cardText {
 	font-size: 0.95rem;
 	color: $text-muted;
@@ -304,9 +250,6 @@
 	hyphens: auto;
 }
 
-/* ================================= */
-/* 13. КНОПКА «ПОДРОБНЕЕ»           */
-/* ================================= */
 .cardButton {
 	align-self: flex-start;
 	background: $primary-color;
@@ -331,80 +274,78 @@
 	}
 }
 
-/* ================================= */
-/* 14. РАЗНЫЕ ФОНЫ ДЛЯ Нечётных/Чётных */
-/* ================================= */
-/* Каждая вторая карточка получает чуть светлее фон */
-.cardsGrid > .cardWrapper:nth-child(2n) .card {
-	background-color: lighten($background-light, 2%);
-}
-
-/* ================================= */
-/* 15. АДАПТИВНЫЕ МЕЛОЧИ          */
-/* ================================= */
-
-/* На сверхузких экранах до 330px */
+/* Adaptive tweaks for very narrow screens */
 @media (max-width: $mini-mobile) {
 	.topSection .heading {
 		font-size: 1.8rem;
+
 		&::after {
 			bottom: -8px;
 			height: 3px;
 			animation-delay: 0.6s;
 		}
 	}
+
 	.cardBody {
 		padding: 0.7rem;
 	}
+
 	.cardTitle {
 		font-size: 0.9rem;
 		margin-bottom: 0.4rem;
 	}
+
 	.cardText {
 		font-size: 0.85rem;
 		margin-bottom: 0.8rem;
 	}
+
 	.cardButton {
 		padding: 0.4rem 0.8rem;
 		font-size: 0.85rem;
 	}
+
 	.cardsGrid {
-		gap: $card-spacing; /* чуть меньше отступов */
-		/* Гарантируем одну колонку */
+		gap: $card-spacing;
 		grid-template-columns: 1fr !important;
 	}
 }
-/* На сверхузких экранах от 331px до 440px */
+
 @media (min-width: ($mini-mobile + 1px)) and (max-width: 440px) {
 	.topSection .heading {
 		font-size: 2rem;
+
 		&::after {
 			bottom: -9px;
 			height: 3px;
 		}
 	}
-	/* Остаётся одна колонка */
+
 	.cardsGrid {
 		grid-template-columns: 1fr !important;
 		gap: $card-spacing;
 	}
+
 	.card {
-		/* Упрощённый hover без сильного наклона */
 		&:hover {
 			transform: translateY(-5px) scale(1.01);
 			box-shadow: 0 0.75rem 1.5rem rgba($shadow-medium, 0.5);
 		}
 	}
+
 	.cardBody {
 		padding: 0.9rem;
 	}
+
 	.cardTitle {
 		font-size: 1rem;
 	}
+
 	.cardText {
 		font-size: 0.9rem;
 		margin-bottom: 0.9rem;
 	}
+
 	.cardButton {
 		padding: 0.5rem 1rem;
 		font-size: 0.9rem;
@@ -415,41 +356,38 @@
 	.topSection .heading {
 		font-size: 2.2rem;
 	}
+
 	.cardBody {
 		padding: 0.9rem;
 	}
+
 	.cardTitle {
 		font-size: 1rem;
 	}
+
 	.cardButton {
 		padding: 0.5rem 1rem;
 		font-size: 0.9rem;
 	}
 
-	/* Делаем так, чтобы сетка центрировала карточки */
 	.cardsGrid {
 		display: grid;
 		grid-template-columns: 1fr;
-		justify-content: center; /* центрируем контент, если есть отступы */
+		justify-content: center;
 	}
 
-	/* Ограничиваем максимальную ширину карточки до 300px и центрируем её */
 	.cardWrapper {
 		max-width: 300px;
 		margin: 0 auto;
 	}
 }
 
-/* На планшетах */
 @media (min-width: $tablet) and (max-width: $desktop-sm) {
 	.topSection .heading {
 		font-size: 2.5rem;
 	}
 }
 
-/* ================================= */
-/* 16. KEYFRAMES АНИМАЦИЙ           */
-/* ================================= */
 @keyframes fadeInDown {
 	0% {
 		opacity: 0;

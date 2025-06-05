@@ -99,7 +99,7 @@ export default function Products() {
 			<div className={styles.containerWrapper}>
 				<Header />
 
-				<Container className='my-5'>
+				<Container>
 					<h1 className={styles.heading}>Продукция</h1>
 
 					{loading && (

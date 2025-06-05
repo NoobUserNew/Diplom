@@ -5,7 +5,6 @@
 .laboratory {
 	background-color: $background-light;
 	color: $text-dark;
-	padding: $section-spacing * 2;
 
 	// Анимация при загрузке страницы
 	animation: fadeInUp $transition-speed ease-out;

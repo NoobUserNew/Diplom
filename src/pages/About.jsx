@@ -31,9 +31,8 @@ function About() {
 
 	return (
 		<div className={styles.aboutWrapper}>
+			<Header />
 			<div className={`container ${styles.container}`}>
-				<Header />
-
 				{/* Заголовок страницы */}
 				<section className={`${styles.fadeInSection} ${styles.topSection}`}>
 					{/* Контейнер для вертикального центрирования контента */}
