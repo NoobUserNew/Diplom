@@ -211,6 +211,10 @@
 	padding: 0 $section-spacing;
 	text-align: left;
 
+	overflow-wrap: break-word;
+	word-break: break-word;
+	hyphens: auto;
+
 	opacity: 0;
 	transform: translateY(20px);
 	animation: fadeInUp 0.7s ease-out forwards;

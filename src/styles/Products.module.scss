@@ -1,0 +1,55 @@
+@import '../styles/variables.scss';
+
+.productsPage {
+  background-color: $background-light;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.containerWrapper {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $text-dark;
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.5s ease;
+}
+
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+  animation: fadeInUp 0.5s ease;
+}
+
+.alertWrapper {
+  margin: 2rem auto;
+  max-width: 500px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.gridRow {
+  margin-left: -0.75rem; // компенсируем padding .colWrapper
+  margin-right: -0.75rem;
+  animation: fadeInUp 0.5s ease;
+}
+
+// Переиспользуем анимацию
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

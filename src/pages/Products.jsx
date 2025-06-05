@@ -1,73 +1,145 @@
-import { useState, useEffect } from 'react';
-import { Card, Row, Col, Container } from 'react-bootstrap';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { useEffect, useState } from 'react'
+import { Alert, Container, Row, Spinner } from 'react-bootstrap'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
+import ProductGrid from '../components/ProductGrid'
+import SearchSortBar from '../components/SearchSortBar'
+import styles from '../styles/Products.module.scss'
 
 export default function Products() {
-    const [slides, setSlides] = useState([]);
-    const [error, setError] = useState(null);
+	const [products, setProducts] = useState([])
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState(null)
 
-    const fetchSlides = async () => {
-        try {
-            const res = await fetch('http://localhost:3000/sliders');
-            if (!res.ok) {
-                throw new Error(`HTTP error! Status: ${res.status}`);
-            }
-            const data = await res.json();
-            setSlides(data.filter(slide => slide.type === 'product').slice(0, 7));
-            setError(null);
-        } catch (err) {
-            console.error('Failed to fetch slides:', err);
-            setError('Не удалось загрузить данные. Проверьте, работает ли сервер.');
-        }
-    };
+	// Состояния для поиска/фильтра/сортировки
+	const [searchName, setSearchName] = useState('') // Поиск по name
+	const [manufacturerFilter, setManufacturerFilter] = useState(null) // null | 'NO_MANUFACTURER' | строка
+	const [sortOrder, setSortOrder] = useState(null) // null | 'asc' | 'desc'
 
-    useEffect(() => {
-        fetchSlides();
-    }, []);
+	// 1. Получаем все продукты с сервера
+	const fetchProducts = async () => {
+		try {
+			const res = await fetch('http://localhost:3000/products', {
+				headers: {
+					// Authorization: "Bearer dummy-token-123",
+				},
+			})
+			if (!res.ok) {
+				throw new Error(`HTTP error! Status: ${res.status}`)
+			}
+			const data = await res.json()
+			setProducts(data)
+			setError(null)
+		} catch (err) {
+			console.error('Failed to fetch products:', err)
+			setError('Не удалось загрузить данные. Проверьте, работает ли сервер.')
+		} finally {
+			setLoading(false)
+		}
+	}
 
-    const productSlides = slides;
+	useEffect(() => {
+		fetchProducts()
+	}, [])
 
-    return (
-        <div className='bg-light text-dark'>
-            <div className='container my-5'>
-                <Header />
-                <Container className="my-5">
-                    <h1 className="mb-4 text-center">Продукция</h1>
-                    {error && <div className="alert alert-danger">{error}</div>}
-                    <Row>
-                        {productSlides.map((slide) => (
-                            <Col key={slide.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                                <Card className="h-100 shadow-sm">
-                                    <Card.Img
-                                        variant="top"
-                                        src={slide.imageUrl}
-                                        style={{ height: '200px', objectFit: 'cover' }}
-                                        alt={slide.title}
-                                    />
-                                    <Card.Body className="d-flex flex-column">
-                                        <Card.Title
-                                            className="text-truncate"
-                                            title={slide.title}
-                                            style={{ wordBreak: 'break-word' }} // Добавляем перенос слов
-                                        >
-                                            {slide.title.length > 30 ? slide.title.substring(0, 30) + '...' : slide.title}
-                                        </Card.Title>
-                                        {slide.description && (
-                                            <Card.Text className="text-muted" style={{ fontSize: '0.9rem' }}>
-                                                {slide.description.length > 100
-                                                    ? slide.description.substring(0, 100) + '...'
-                                                    : slide.description}
-                                            </Card.Text>
-                                        )}
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                </Container>
-                <Footer/>
-            </div>
-        </div>
-    );
+	// 2. Список уникальных manufacturer (исключая пустые)
+	const manufacturers = Array.from(
+		new Set(
+			products.map(p => p.manufacturer).filter(mfg => mfg && mfg.trim() !== '')
+		)
+	)
+
+	// 3. Фильтрация и сортировка «на лету»
+	const getFilteredAndSorted = () => {
+		let filtered = products
+
+		// 3.1. Поиск по name
+		if (searchName.trim() !== '') {
+			const lowerName = searchName.trim().toLowerCase()
+			filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerName))
+		}
+
+		// 3.2. Фильтр по manufacturer
+		if (manufacturerFilter === 'NO_MANUFACTURER') {
+			filtered = filtered.filter(
+				p => !p.manufacturer || p.manufacturer.trim() === ''
+			)
+		} else if (manufacturerFilter) {
+			filtered = filtered.filter(p => p.manufacturer === manufacturerFilter)
+		}
+		// если manufacturerFilter === null, не фильтруем по производителю
+
+		// 3.3. Сортировка по manufacturer
+		if (sortOrder === 'asc') {
+			filtered = filtered.slice().sort((a, b) => {
+				const aMan = (a.manufacturer || '').toLowerCase()
+				const bMan = (b.manufacturer || '').toLowerCase()
+				return aMan.localeCompare(bMan, 'ru')
+			})
+		} else if (sortOrder === 'desc') {
+			filtered = filtered.slice().sort((a, b) => {
+				const aMan = (a.manufacturer || '').toLowerCase()
+				const bMan = (b.manufacturer || '').toLowerCase()
+				return bMan.localeCompare(aMan, 'ru')
+			})
+		}
+
+		return filtered
+	}
+
+	const filteredAndSortedProducts = getFilteredAndSorted()
+
+	// 4. Обработчик «поиск по name» (при клике на 🔍)
+	const onSearchClick = value => {
+		setSearchName(value)
+	}
+
+	return (
+		<div className={styles.productsPage}>
+			<div className={styles.containerWrapper}>
+				<Header />
+
+				<Container className='my-5'>
+					<h1 className={styles.heading}>Продукция</h1>
+
+					{loading && (
+						<div className={styles.spinnerWrapper}>
+							<Spinner animation='border' role='status' />
+						</div>
+					)}
+
+					{error && (
+						<div className={styles.alertWrapper}>
+							<Alert variant='danger' className='alert'>
+								{error}
+							</Alert>
+						</div>
+					)}
+
+					{!loading && !error && (
+						<>
+							{/* 5. Параметры поиска/фильтра/сортировки */}
+							<SearchSortBar
+								searchName={searchName}
+								setSearchName={setSearchName}
+								onSearchClick={onSearchClick}
+								manufacturers={manufacturers}
+								manufacturerFilter={manufacturerFilter}
+								setManufacturerFilter={setManufacturerFilter}
+								sortOrder={sortOrder}
+								setSortOrder={setSortOrder}
+							/>
+
+							{/* 6. Сетка карточек */}
+							<Row className={styles.gridRow}>
+								<ProductGrid products={filteredAndSortedProducts} />
+							</Row>
+						</>
+					)}
+				</Container>
+
+				<Footer />
+			</div>
+		</div>
+	)
 }
