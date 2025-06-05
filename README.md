@@ -68,3 +68,39 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Use Case Diagram with PlantUML
+
+To draw a use case diagram, install the PlantUML plugin for your IDE (e.g., VS Code, IntelliJ IDEA) and create a `.puml` file with the following content:
+
+```plantuml
+@startuml
+:User: --> (Login)
+:User: --> (View Dashboard)
+:Admin: --> (Manage Users)
+:Admin: --> (View Dashboard)
+@enduml
+```
+
+Open the `.puml` file in your IDE and use the PlantUML extension to preview the diagram.
+
+## Диаграмма вариантов использования (Use Case Diagram)
+
+```plantuml
+@startuml
+left to right direction
+
+actor Пользователь
+actor Администратор
+
+rectangle "Система" {
+  Пользователь -- (Войти в систему)
+  Пользователь -- (Просмотреть данные)
+  Пользователь -- (Выйти из системы)
+
+  Администратор -- (Управлять пользователями)
+  Администратор -- (Просмотреть отчеты)
+  (Управлять пользователями) ..> (Войти в систему) : <<include>>
+}
+@enduml
+```
