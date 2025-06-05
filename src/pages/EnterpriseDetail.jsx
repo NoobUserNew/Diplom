@@ -2,6 +2,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import styles from '../styles/EnterpriseDetail.module.scss';
+
 export default function EnterpriseDetail() {
   const { id } = useParams();
   const [enterprise, setEnterprise] = useState(null);
@@ -10,24 +12,21 @@ export default function EnterpriseDetail() {
 
   useEffect(() => {
     const fetchEnterprise = async () => {
-      setLoading(true); // Устанавливаем состояние загрузки
+      setLoading(true);
       try {
         const res = await fetch(`http://localhost:3000/enterprises/${id}`);
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         const data = await res.json();
-        console.log('Fetched enterprise data:', data); // Логирование данных
-        if (!data.image_url) {
-          console.warn('Image URL is missing or empty:', data);
-        }
+        console.log('Fetched enterprise data:', data);
         setEnterprise(data);
         setError(null);
       } catch (err) {
         console.error('Failed to fetch enterprise:', err);
         setError(`Не удалось загрузить данные предприятия: ${err.message}`);
       } finally {
-        setLoading(false); // Завершаем загрузку
+        setLoading(false);
       }
     };
     fetchEnterprise();
@@ -35,41 +34,53 @@ export default function EnterpriseDetail() {
 
   if (error) {
     return (
-      <div className="p-4">
-        <Link className="text-blue-600" to="/">← Назад</Link>
-        <div className="alert alert-danger mt-4">{error}</div>
+      <div className={styles.errorPage}>
+        <Link className={styles.backLink} to="/">← Назад</Link>
+        <div className={styles.errorBox}>{error}</div>
       </div>
     );
   }
 
   if (loading || !enterprise) {
-    return <div className="p-4">Загрузка...</div>;
+    return <div className={styles.loader}>Загрузка...</div>;
   }
 
   return (
-    <div className="container my-5">
-     <Header/>
-      <Link className="text-blue-600" to="/enterprises">← Назад</Link>
-      <h1 className="text-2xl font-bold mb-4">{enterprise.name}</h1>
-      {enterprise.image_url ? (
-        <img
-          src={enterprise.image_url}
-          alt={enterprise.name}
-          className="w-full h-64 object-cover rounded mb-4"
-          onError={(e) => {
-            console.error('Image failed to load:', e.target.src);
-            e.target.src = 'https://via.placeholder.com/400x300';
-          }}
-        />
-      ) : (
-        <div className="w-full h-64 bg-gray-200 rounded mb-4 flex items-center justify-center text-gray-500">
-          Нет изображения
+    <div className={styles.detailWrapper}>
+      <Header />
+
+      <div className={styles.innerContainer}>
+        <Link className={styles.backLink} to="/enterprises">← Назад</Link>
+
+        {/* Блок с фото слева и названием справа */}
+        <div className={styles.headerBlock}>
+          <div className={styles.headerImage}>
+            {enterprise.image_url ? (
+              <img
+                src={enterprise.image_url}
+                alt={enterprise.name}
+                onError={(e) => {
+                  console.error('Image failed to load:', e.target.src);
+                  e.target.src = 'https://via.placeholder.com/200?text=No+Image';
+                }}
+              />
+            ) : (
+              <div className={styles.noAvatar}>Нет фото</div>
+            )}
+          </div>
+
+          <div className={styles.headerInfo}>
+            <h1 className={styles.detailTitle}>{enterprise.name}</h1>
+          </div>
         </div>
-      )}
-      {enterprise.description && (
-        <p className="text-gray-700">{enterprise.description}</p>
-      )}
-      <Footer/>
+
+        {/* Описание ниже */}
+        {enterprise.description && (
+          <p className={styles.description}>{enterprise.description}</p>
+        )}
+      </div>
+
+      <Footer />
     </div>
   );
 }
