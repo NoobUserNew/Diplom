@@ -1,0 +1,189 @@
+// Header.module.scss
+
+/* ================================
+   1. ПЕРЕМЕННЫЕ (импорт или копирование)
+   ================================= */
+
+// Если у вас есть общий файл с переменными (например, variables.scss), то лучше его импортировать:
+$primary-color: #ffc107; // Желтый акцент
+$primary-light: #fff3cd; // Светло-жёлтый фон
+$primary-dark: #e0a800; // Тёмно-жёлтый (для контраста)
+$text-dark: #212529; // Основной тёмный текст
+$text-muted: #6c757d; // Приглушённый текст
+$background-light: #f8f9fa; // Основной светлый фон
+$white: #ffffff; // Белый
+$border-color: #dee2e6; // Цвет границ
+$shadow-light: rgba(0, 0, 0, 0.05);
+$shadow-medium: rgba(0, 0, 0, 0.15);
+
+// Размеры и отступы
+$container-max-width: 1200px;
+$section-spacing: 3rem; // 48px
+$card-spacing: 1.25rem; // 20px
+$border-radius: 0.5rem; // 8px
+$border-radius-sm: 0.25rem; // 4px
+$box-shadow: 0 0.5rem 1rem $shadow-medium;
+$transition-speed: 0.3s;
+
+// Брейкпоинты для адаптивности
+$mobile: 480px;
+$tablet: 768px;
+$desktop-sm: 1024px;
+$desktop-md: 1280px;
+$desktop-lg: 1440px;
+
+// Размеры и отступы
+$container-max-width: 1200px;
+$transition-speed: 0.3s;
+
+/* ================================
+   2. СТИЛИ ДЛЯ HEADER
+   ================================= */
+
+/* Обёртка навигации */
+.navbar {
+	position: sticky;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	width: 100%;
+	background-color: $white;
+	box-shadow: 0 0.25rem 0.75rem $shadow-light;
+	padding: 0.5rem 1rem;
+
+	@media (max-width: $tablet) {
+		padding: 0.5rem 0.75rem;
+	}
+}
+
+/* Контейнер для содержимого (центровка) */
+.container {
+	max-width: $container-max-width;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+/* Лого */
+.logoLink {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+
+	img {
+		width: 64px;
+		height: 64px;
+		object-fit: contain;
+	}
+}
+
+/* Бургер-кнопка */
+.toggleButton {
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	display: none; // показываем только на мобильных
+
+	@media (max-width: $tablet) {
+		display: block;
+	}
+
+	.toggleIcon {
+		width: 24px;
+		height: 24px;
+		position: relative;
+
+		/* Простая анимация для иконки-бургера */
+		span {
+			display: block;
+			width: 100%;
+			height: 2px;
+			background-color: $text-dark;
+			border-radius: 1px;
+			position: absolute;
+			left: 0;
+			transition: all $transition-speed ease;
+		}
+
+		span:nth-child(1) {
+			top: 4px;
+		}
+		span:nth-child(2) {
+			top: 11px;
+		}
+		span:nth-child(3) {
+			top: 18px;
+		}
+	}
+}
+
+/* Основное меню */
+.navLinks {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+
+	@media (max-width: $tablet) {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100%;
+		background-color: $white;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 1rem;
+		box-shadow: 0 0.5rem 1rem $shadow-light;
+		transform: translateY(-200%);
+		opacity: 0;
+		visibility: hidden;
+		transition: transform $transition-speed ease, opacity $transition-speed ease;
+
+		&.open {
+			transform: translateY(0);
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}
+
+/* Ссылка в меню */
+.navLink {
+	text-decoration: none;
+	color: $primary-color;
+	font-weight: 600;
+	transition: color $transition-speed ease, transform $transition-speed ease;
+
+	&:hover {
+		color: $primary-dark;
+		transform: translateY(-2px);
+	}
+
+	@media (max-width: $tablet) {
+		width: 100%;
+		padding: 0.5rem 0;
+		border-bottom: 1px solid $border-color;
+		color: $text-dark;
+
+		&:hover {
+			color: $primary-color;
+			transform: none;
+		}
+	}
+}
+
+/* Для активного пункта меню (если нужно) */
+.activeLink {
+	color: $primary-dark;
+	font-weight: 700;
+
+	&:after {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 2px;
+		background-color: $primary-color;
+		margin-top: 4px;
+	}
+}

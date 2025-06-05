@@ -1,0 +1,107 @@
+/* ======================================
+   Footer.module.scss
+   ====================================== */
+
+/* 1. ПЕРЕМЕННЫЕ */
+$primary-color: #ffc107;
+$text-color: #212529;
+$text-muted: #6c757d;
+$background-footer: #f8f9fa;
+$border-light: #e9ecef;
+$transition-speed: 0.3s;
+
+/* 2. ОБЩИЕ СБРОСЫ */
+@mixin reset-margin-padding {
+	margin: 0;
+	padding: 0;
+}
+@mixin flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* 3. КОРНЕВЫЕ СТИЛИ */
+
+.footer {
+	background-color: $background-footer;
+	color: $text-color;
+	border-top: 1px solid $border-light;
+	padding: 2rem 1rem;
+	font-family: Arial, sans-serif;
+	font-size: 0.95rem;
+	line-height: 1.5;
+	transition: background-color $transition-speed ease;
+
+	&:hover {
+		background-color: lighten($background-footer, 2%);
+	}
+}
+
+/* Внутренний контейнер: отцентрированная и отзывчивая «обёртка» */
+.inner {
+	@include flex-center;
+	flex-wrap: wrap;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+/* 4. СТИЛИ КОЛОНОК */
+
+.column {
+	flex: 1 1 100%;
+	max-width: 100%;
+	margin-bottom: 1.5rem;
+	padding: 0 1rem;
+	text-align: center;
+
+	@media (min-width: 768px) {
+		flex: 0 0 50%;
+		max-width: 50%;
+		text-align: left;
+		margin-bottom: 0;
+	}
+}
+
+/* Заголовок внутри колонки */
+.heading {
+	font-size: 1.2rem;
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+	position: relative;
+	display: inline-block;
+	color: $primary-color;
+
+	/* декоративная «линия» под заголовком */
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -0.25rem;
+		left: 0;
+		width: 40px;
+		height: 3px;
+		background-color: $primary-color;
+		border-radius: 2px;
+	}
+}
+
+/* Обычный текст */
+.text {
+	margin-bottom: 0.5rem;
+	color: $text-muted;
+
+	strong {
+		color: $text-color;
+	}
+}
+
+/* Стили для копирайта (нижняя строка) */
+.copyright {
+	margin: 0;
+	font-size: 0.9rem;
+	color: $text-muted;
+
+	@media (min-width: 768px) {
+		text-align: right;
+	}
+}

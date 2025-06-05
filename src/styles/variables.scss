@@ -1,0 +1,30 @@
+$primary-color: #ffc107; // Желтый акцент
+$primary-light: #fff3cd; // Светло-жёлтый фон
+$primary-dark: #e0a800; // Тёмно-жёлтый (для контраста)
+$text-dark: #212529; // Основной тёмный текст
+$text-muted: #6c757d; // Приглушённый текст
+$background-light: #f8f9fa; // Основной светлый фон
+$white: #ffffff; // Белый
+$border-color: #dee2e6; // Цвет границ
+$shadow-light: rgba(0, 0, 0, 0.05);
+$shadow-medium: rgba(0, 0, 0, 0.15);
+
+// Размеры и отступы
+$container-max-width: 1200px;
+$section-spacing: 1rem; // 48px
+$card-spacing: 1.25rem; // 20px
+$border-radius: 0.5rem; // 8px
+$border-radius-sm: 0.25rem; // 4px
+$box-shadow: 0 0.5rem 1rem $shadow-medium;
+$transition-speed: 0.3s;
+
+// Брейкпоинты для адаптивности
+$mobile: 480px;
+$tablet: 768px;
+$desktop-sm: 1024px;
+$desktop-md: 1280px;
+$desktop-lg: 1440px;
+
+// Размеры и отступы
+$container-max-width: 1200px;
+$transition-speed: 0.3s;

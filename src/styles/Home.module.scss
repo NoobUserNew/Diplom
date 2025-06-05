@@ -1,0 +1,763 @@
+/**
+ * Home.module.scss
+ * Улучшенное стильное оформление для компонента Home
+ *
+ * Структура файла:
+ * 1. Переменные (цвета, размеры, отступы)
+ * 2. Миксины для повторяющихся стилей
+ * 3. Hero-блок
+ * 4. Хлебные крошки (Breadcrumb)
+ * 5. Основные стили компонентов  
+ * 6. Декоративные фоны и иконки  
+ * 7. Анимации и интерактивные эффекты
+ * 8. Адаптивные стили для разных устройств
+ */
+
+/* ======================================
+   1. ПЕРЕМЕННЫЕ
+   ====================================== */
+
+// Цветовая схема
+$primary-color: #ffc107; // Желтый акцент
+$primary-light: #fff3cd; // Светло-жёлтый фон
+$primary-dark: #e0a800; // Тёмно-жёлтый (для контраста)
+$text-dark: #212529; // Основной тёмный текст
+$text-muted: #6c757d; // Приглушённый текст
+$background-light: #f8f9fa; // Основной светлый фон
+$white: #ffffff; // Белый
+$border-color: #dee2e6; // Цвет границ
+$shadow-light: rgba(0, 0, 0, 0.05);
+$shadow-medium: rgba(0, 0, 0, 0.15);
+
+// Размеры и отступы
+$container-max-width: 1200px;
+$section-spacing: 1rem; // 48px
+$card-spacing: 1.25rem; // 20px
+$border-radius: 0.5rem; // 8px
+$border-radius-sm: 0.25rem; // 4px
+$box-shadow: 0 0.5rem 1rem $shadow-medium;
+$transition-speed: 0.3s;
+
+// Брейкпоинты для адаптивности
+$mobile: 480px;
+$tablet: 768px;
+$desktop-sm: 1024px;
+$desktop-md: 1280px;
+$desktop-lg: 1440px;
+
+/* ======================================
+   2. МИКСИНЫ
+   ====================================== */
+
+// Центрирование через flexbox
+@mixin flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+// Общие стили для секций
+@mixin section-container {
+	padding: 2rem;
+	margin-bottom: $section-spacing;
+	border-radius: $border-radius;
+	background-color: $white;
+	box-shadow: 0 0.25rem 0.75rem $shadow-light;
+	transition: all $transition-speed ease;
+}
+
+// Стили для кнопок
+@mixin button-style {
+	display: inline-block;
+	padding: 0.75rem 1.5rem;
+	border: 2px solid $primary-color;
+	border-radius: $border-radius-sm;
+	background-color: transparent;
+	color: $primary-color;
+	font-weight: 600;
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	transition: all $transition-speed ease;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+
+	&:hover {
+		background-color: $primary-color;
+		color: $white;
+		transform: translateY(-2px);
+		box-shadow: 0 0.75rem 1.5rem $shadow-light;
+	}
+
+	&:active {
+		transform: translateY(-1px);
+	}
+
+	// Эффект блика при наведении
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -120%;
+		width: 50%;
+		height: 100%;
+		background: rgba(255, 255, 255, 0.2);
+		transform: skewX(-20deg);
+		transition: left 0.7s ease;
+	}
+	&:hover::before {
+		left: 180%;
+	}
+}
+
+// Стили для карточек
+@mixin card-style {
+	border: 1px solid $border-color;
+	border-radius: $border-radius;
+	padding: $card-spacing;
+	background-color: $white;
+	box-shadow: $box-shadow;
+	transition: all $transition-speed ease;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+
+	&:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 1rem 2rem $shadow-medium;
+	}
+}
+
+// Стили для заголовков секций
+@mixin heading-style {
+	color: $primary-dark;
+	margin-bottom: 1rem;
+	font-weight: 700;
+	position: relative;
+	display: inline-block;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -0.5rem;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 60px;
+		height: 4px;
+		background-color: $primary-color;
+		border-radius: 3px;
+	}
+
+	&:hover::after {
+		animation: pulse 1.5s infinite;
+	}
+}
+
+/* ======================================
+   3. HERO-БЛОК
+   ====================================== */
+
+.heroSection {
+	position: relative;
+	width: 100%;
+	height: 60vh;
+	min-height: 400px;
+	background-image: url('./background.png');
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	@include flex-center;
+	color: $white;
+	text-align: center;
+	overflow: hidden;
+
+	.overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.4);
+	}
+
+	.heroContent {
+		position: relative;
+		z-index: 1;
+		max-width: 800px;
+		padding: 1rem 2rem;
+		background: rgba(0, 0, 0, 0.3);
+		border-radius: $border-radius-sm;
+
+		h1 {
+			font-size: 2.5rem;
+			margin-bottom: 1rem;
+			line-height: 1.2;
+		}
+
+		p {
+			font-size: 1.25rem;
+			line-height: 1.5;
+			margin-bottom: 2rem;
+			color: rgba(255, 255, 255, 0.85);
+		}
+
+		.ctaButton {
+			@include button-style;
+			background-color: $primary-color;
+			color: $white;
+			border-color: $white;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+
+			&:hover {
+				background-color: darken($primary-color, 10%);
+			}
+		}
+	}
+}
+
+/* ======================================
+   4. ХЛЕБНЫЕ КРОШКИ (Breadcrumb)
+   ====================================== */
+
+/* ======================================
+   5. ОСНОВНЫЕ СТИЛИ КОМПОНЕНТОВ
+   ====================================== */
+
+// Основной контейнер
+.homeContainer {
+	background-color: $background-light;
+	color: $text-dark;
+
+	position: relative;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+// Внутренний контейнер
+.mainContent {
+	max-width: $container-max-width;
+	margin: 0 auto;
+	padding: 3rem 1.5rem;
+	position: relative;
+	.Header {
+		z-index: 1000;
+		position: fixed;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+	}
+	// Декоративный фоновый градиент позади всего контента
+	&::before {
+		content: '';
+		position: absolute;
+		top: -20%;
+		left: -50%;
+		width: 200%;
+		height: 75%;
+		background: radial-gradient(
+			circle at top right,
+			rgba($primary-color, 0.05),
+			transparent 70%
+		);
+		z-index: -1;
+	}
+}
+
+// Секция "О компании"
+.aboutSection {
+	@include section-container;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: url('./icon-about.png');
+		position: absolute;
+		top: -10px;
+		right: -10px;
+		width: 80px;
+		height: 80px;
+		opacity: 0.1;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 150px;
+		height: 2px;
+		background: linear-gradient(
+			to right,
+			transparent,
+			$primary-color,
+			transparent
+		);
+	}
+
+	.sectionHeading {
+		@include heading-style;
+		font-size: 2rem;
+	}
+
+	.sectionDescription {
+		max-width: 600px;
+		margin: 0 auto 2rem;
+		color: $text-muted;
+		font-size: 1.125rem;
+		line-height: 1.6;
+	}
+
+	.actionButton {
+		@include button-style;
+		margin-top: 1.5rem;
+	}
+}
+
+// Контейнеры для секций с слайдерами
+.sectionContainer {
+	@include section-container;
+	position: relative;
+	overflow: hidden;
+
+	// Декоративные элементы-сферы
+	&::before {
+		content: '';
+		position: absolute;
+		top: -50px;
+		right: -50px;
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		background-color: rgba($primary-color, 0.1);
+		z-index: 0;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -30px;
+		left: -30px;
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		background-color: rgba($primary-color, 0.1);
+		z-index: 0;
+	}
+
+	.sectionHeading {
+		@include heading-style;
+		font-size: 1.75rem;
+	}
+
+	.sectionDescription {
+		max-width: 600px;
+		margin: 0 auto 1.5rem;
+		color: $text-muted;
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+
+	.actionButton {
+		@include button-style;
+		margin-top: 1.25rem;
+	}
+}
+
+// Контейнер для слайдера
+.swiperContainer {
+	padding: 3rem 0rem;
+	position: relative;
+	z-index: 1;
+
+	// Стили для компонентов Swiper
+	:global(.swiper) {
+		padding: 1.5rem 0.5rem;
+	}
+
+	:global(.swiper-pagination) {
+		bottom: -5px;
+	}
+
+	:global(.swiper-pagination-bullet) {
+		width: 10px;
+		height: 10px;
+		background-color: rgba($primary-color, 0.4);
+		opacity: 1;
+		transition: transform $transition-speed ease,
+			background-color $transition-speed ease;
+
+		&:hover {
+			transform: scale(1.2);
+			background-color: rgba($primary-color, 0.6);
+		}
+
+		&:global(.swiper-pagination-bullet-active) {
+			background-color: $primary-color;
+			transform: scale(1.3);
+		}
+	}
+
+	:global(.swiper-button-next),
+	:global(.swiper-button-prev) {
+		color: $primary-color;
+		background-color: rgba($white, 0.8);
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		transition: transform $transition-speed ease, opacity $transition-speed ease;
+		opacity: 0.8;
+
+		&:hover {
+			opacity: 1;
+			transform: scale(1.1);
+		}
+
+		&::after {
+			font-size: 1.2rem;
+			font-weight: bold;
+		}
+	}
+}
+
+// Карточки в слайдерах
+.slideCard {
+	@include card-style;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow: hidden;
+
+	// Изображение в карточке
+	.cardImage {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+		border-radius: $border-radius-sm;
+		margin-bottom: 1rem;
+		transition: transform $transition-speed ease;
+	}
+
+	// Заголовок карточки
+	.cardTitle {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: $text-dark;
+		margin-bottom: 0.5rem;
+		text-decoration: none;
+		transition: color $transition-speed ease, transform $transition-speed ease;
+		display: inline-block;
+
+		&:hover {
+			color: $primary-color;
+			transform: translateY(-2px);
+		}
+	}
+
+	// Описание карточки
+	.cardDescription {
+		color: $text-muted;
+		font-size: 0.875rem;
+		margin-bottom: 0;
+		flex-grow: 1;
+		line-height: 1.4;
+	}
+
+	&:hover {
+		// Подсветка фона
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(
+				to bottom,
+				transparent 70%,
+				rgba($primary-color, 0.05)
+			);
+			border-radius: $border-radius;
+			z-index: 0;
+			pointer-events: none;
+		}
+
+		.cardImage {
+			transform: scale(1.05);
+		}
+	}
+}
+
+/* ======================================
+   6. ДЕКОРАТИВНЫЕ ФОНЫ И ИКОНКИ
+   ====================================== */
+
+.decorative-bg {
+	position: absolute;
+	z-index: -1;
+
+	&.topLeftCircle {
+		top: -60px;
+		left: -60px;
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		background-color: rgba($primary-color, 0.08);
+	}
+
+	&.bottomRightCircle {
+		bottom: -40px;
+		right: -40px;
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		background-color: rgba($primary-color, 0.08);
+	}
+}
+
+/* ======================================
+   7. АНИМАЦИИ И ИНТЕРАКТИВНЫЕ ЭФФЕКТЫ
+   ====================================== */
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
+}
+
+// Анимации для контейнеров
+.homeContainer {
+	animation: fadeIn 0.8s ease-out;
+}
+
+.aboutSection {
+	animation: fadeIn 1s ease-out 0.2s;
+	animation-fill-mode: both;
+}
+
+.sectionContainer {
+	animation: fadeIn 1s ease-out;
+	animation-fill-mode: both;
+
+	&:nth-child(1) {
+		animation-delay: 0.3s;
+	}
+	&:nth-child(2) {
+		animation-delay: 0.5s;
+	}
+	&:nth-child(3) {
+		animation-delay: 0.7s;
+	}
+}
+
+/* ======================================
+   8. АДАПТИВНЫЕ СТИЛИ
+   ====================================== */
+
+// Мобильные устройства (до 480px)
+@media (max-width: $mobile) {
+	.heroSection {
+		height: 50vh;
+		min-height: 300px;
+		.heroContent {
+			h1 {
+				font-size: 1.75rem;
+			}
+			p {
+				font-size: 1rem;
+			}
+		}
+	}
+
+	.breadcrumb {
+		font-size: 0.8rem;
+		li:not(:last-child)::after {
+			content: '/';
+			margin: 0 0.4rem;
+		}
+	}
+
+	.sectionHeading {
+		font-size: 1.5rem;
+		&::after {
+			width: 40px;
+			height: 3px;
+		}
+	}
+
+	.sectionDescription {
+		font-size: 0.95rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.sectionContainer {
+		padding: 1.5rem 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.actionButton {
+		padding: 0.6rem 1.2rem;
+		font-size: 0.9rem;
+	}
+
+	.slideCard {
+		.cardImage {
+			height: 160px;
+		}
+		.cardTitle {
+			font-size: 1.1rem;
+		}
+		.cardDescription {
+			font-size: 0.8rem;
+		}
+	}
+
+	.swiperContainer {
+		:global(.swiper-button-next),
+		:global(.swiper-button-prev) {
+			width: 30px;
+			height: 30px;
+			&::after {
+				font-size: 1rem;
+			}
+		}
+	}
+}
+
+// Планшеты (от 481px до 768px)
+@media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+	.heroSection {
+		height: 55vh;
+		.heroContent {
+			h1 {
+				font-size: 2.25rem;
+			}
+			p {
+				font-size: 1.1rem;
+			}
+		}
+	}
+	.swiperContainer {
+		padding: 1rem 0rem;
+	}
+	.sectionHeading {
+		font-size: 1.75rem;
+	}
+
+	.sectionContainer {
+		padding: 1.75rem 1.25rem;
+	}
+
+	.slideCard {
+		.cardImage {
+			height: 180px;
+		}
+	}
+}
+
+// Маленькие десктопы (от 769px до 1024px)
+@media (min-width: #{$tablet + 1px}) and (max-width: $desktop-sm) {
+	.mainContent {
+		padding: 2.75rem 1.5rem;
+	}
+
+	.sectionContainer {
+		padding: 2rem 1.5rem;
+	}
+}
+.swiperContainer {
+	padding: 2rem 0rem;
+}
+// Средние и большие десктопы (от 1025px и выше)
+@media (min-width: #{$desktop-sm + 1px}) {
+	.heroSection {
+		height: 65vh;
+		.heroContent {
+			h1 {
+				font-size: 2.75rem;
+			}
+			p {
+				font-size: 1.25rem;
+			}
+		}
+	}
+
+	.mainContent {
+		padding: 3rem 2rem;
+	}
+
+	.sectionHeading {
+		font-size: 2.25rem;
+		&::after {
+			width: 60px;
+			height: 4px;
+		}
+	}
+
+	.sectionDescription {
+		font-size: 1.25rem;
+		max-width: 700px;
+	}
+
+	.sectionContainer {
+		padding: 2.5rem 2rem;
+	}
+
+	.slideCard {
+		.cardImage {
+			height: 220px;
+		}
+		.cardTitle {
+			font-size: 1.4rem;
+		}
+		.cardDescription {
+			font-size: 0.95rem;
+		}
+	}
+
+	.actionButton {
+		padding: 0.85rem 1.75rem;
+		font-size: 1.1rem;
+	}
+}
+
+// Очень большие экраны (от 1440px и выше)
+@media (min-width: $desktop-lg) {
+	.mainContent {
+		max-width: 1400px;
+	}
+	.sectionDescription {
+		max-width: 800px;
+	}
+}

@@ -1,122 +1,167 @@
-import { useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
-import { Link, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import { Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
+import styles from '../styles/Home.module.scss'
 
 export default function Home() {
-    const [slides, setSlides] = useState([]);
-    const navigate = useNavigate();
-    useEffect(() => {
-        fetch('http://localhost:3000/sliders')
-            .then((res) => res.json())
-            .then((data) => setSlides(data));
-    }, []);
+	const [slides, setSlides] = useState([])
+	const navigate = useNavigate()
 
-    const renderSlider = (type) => (
-        <Swiper
-            pagination={{ clickable: true }}
-            navigation={true}
-            modules={[Pagination, Navigation]}
-            className="my-8"
-            slidesPerView={1}
-            spaceBetween={20}
-            breakpoints={{
-                640: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-            }}
-        >
-            {slides
-                .filter((slide) => slide.type === type)
-                .map((slide) => (
-                    <SwiperSlide key={slide.id}>
-                        <div className="border p-4 rounded shadow relative">
-                            <img
-                                src={slide.imageUrl}
-                                alt={slide.title}
-                                className="img-fluid rounded mb-2"
-                                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                            />
-                            <br />
-                            {type === 'news' ? (
-                                <h3 className="font-semibold text-lg">
-                                    <Link to={`/news/${slide.id}`} style={{ color: '#212529', textDecoration: 'none', fontWeight: 600, fontSize: '24px' }}>
-                                        {slide.title.length > 50 ? slide.title.slice(0, 22) + '...' : slide.title}
-                                    </Link>
-                                </h3>
-                            ) : (
-                                <h3 className="font-semibold text-lg">{slide.title.length > 50 ? slide.title.slice(0, 22) + '...' : slide.title}</h3>
-                            )}
+	useEffect(() => {
+		fetch('http://localhost:3000/sliders')
+			.then(res => res.json())
+			.then(data => setSlides(data))
+	}, [])
 
-                            {slide.description && (
-                                <p className="text-muted small">{slide.description.length > 40 ? slide.description.slice(0, 40) + '...' : slide.description}</p>
-                            )}
-                        </div>
-                    </SwiperSlide>
-                ))}
-        </Swiper>
-    );
+	const renderSlider = type => (
+		<Swiper
+			pagination={{ clickable: true }}
+			navigation={true}
+			modules={[Pagination, Navigation]}
+			className={styles.swiperContainer}
+			slidesPerView={1}
+			spaceBetween={20}
+			breakpoints={{
+				640: { slidesPerView: 2 },
+				1024: { slidesPerView: 3 },
+			}}
+		>
+			{slides
+				.filter(slide => slide.type === type)
+				.map(slide => (
+					<SwiperSlide key={slide.id}>
+						<div className={styles.slideCard}>
+							<img
+								src={slide.imageUrl}
+								alt={slide.title}
+								className={styles.cardImage}
+							/>
+							<h3 className={styles.cardTitle}>
+								{type === 'news' ? (
+									<Link to={`/news/${slide.id}`}>
+										{slide.title.length > 50
+											? slide.title.slice(0, 22) + '...'
+											: slide.title}
+									</Link>
+								) : (
+									<>
+										{slide.title.length > 50
+											? slide.title.slice(0, 22) + '...'
+											: slide.title}
+									</>
+								)}
+							</h3>
+							{slide.description && (
+								<p className={styles.cardDescription}>
+									{slide.description.length > 40
+										? slide.description.slice(0, 40) + '...'
+										: slide.description}
+								</p>
+							)}
+						</div>
+					</SwiperSlide>
+				))}
+		</Swiper>
+	)
 
-    return (
-        <div className="bg-light text-dark">
-            <div className="container py-5">
-                <Header />
-                <section className="text-center mb-5">
-                    <h1 className="mb-3 text-warning">О компании</h1>
-                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
-                        Наша компания специализируется на производстве высококачественной продукции для различных отраслей.
-                    </p>
-                    <Link to="/about" className="btn btn-outline-warning mt-3">Узнать больше</Link>
-                </section>
+	return (
+		<div className={styles.homeContainer}>
+			{/* Hero-блок с большой заставкой */}
+			<section className={styles.heroSection}>
+				<div className='overlay'></div>
+				<div className={styles.heroContent}>
+					<h1>Добро пожаловать в нашу компанию!</h1>
+					<p>
+						Мы производим высококачественные товары для самых разных отраслей и
+						постоянно развиваемся, чтобы радовать вас новыми решениями.
+					</p>
+					<Link to='/about' className={`ctaButton ${styles.ctaButton}`}>
+						Подробнее о нас
+					</Link>
+				</div>
+			</section>
 
-                <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
-                    <h2 className="mb-3 text-warning">Предприятия</h2>
-                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
-                        Познакомьтесь с нашими предприятиями и производственными мощностями.
-                    </p>
-                    {renderSlider('enterprise')} {/* Обновляем тип */}
-                    <button
-                        className="bg-light btn btn-outline-warning mt-3"
-                        onClick={() => navigate(`/enterprises/`)}
-                    >
-                        Подробнее
-                    </button>
-                </section>
+			<div className={styles.mainContent}>
+				{/* Секция "О компании" */}
+				<section className={styles.aboutSection}>
+					<h2 className={styles.sectionHeading}>О компании</h2>
+					<p className={styles.sectionDescription}>
+						Наша компания специализируется на производстве высококачественной
+						продукции для различных отраслей. Мы ценим каждого клиента и
+						гарантируем надёжность в каждом изделии.
+					</p>
+					<Link to='/about' className={styles.actionButton}>
+						Узнать больше
+					</Link>
+				</section>
+				<section className={styles.Header}>
+					<Header />
+				</section>
+				{/* Секция "Предприятия" */}
+				<section className={styles.sectionContainer}>
+					<h2 className={styles.sectionHeading}>Предприятия</h2>
+					<p className={styles.sectionDescription}>
+						Познакомьтесь с нашими предприятиями, их историями и
+						производственными мощностями. Мы гордимся тем, что используем
+						современные технологии.
+					</p>
+					{renderSlider('enterprise')}
+					<button
+						className={styles.actionButton}
+						onClick={() => navigate('/enterprises/')}
+					>
+						Подробнее
+					</button>
+				</section>
 
-                <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
-                    <h2 className="mb-3 text-warning">Продукция</h2>
-                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
-                        Ознакомьтесь с широким ассортиментом нашей продукции.
-                    </p>
-                    {renderSlider('product')} {/* Обновляем тип */}
-                    <button
-                        className="bg-light btn btn-outline-warning mt-3"
-                        onClick={() => navigate(`/products/`)}
-                    >
-                        Подробнее
-                    </button>
-                </section>
+				{/* Секция "Продукция" */}
+				<section className={styles.sectionContainer}>
+					<h2 className={styles.sectionHeading}>Продукция</h2>
+					<p className={styles.sectionDescription}>
+						Ознакомьтесь с широким ассортиментом нашей продукции: от сырья до
+						готовых изделий, которые находят применение по всему миру.
+					</p>
+					{renderSlider('product')}
+					<button
+						className={styles.actionButton}
+						onClick={() => navigate('/products/')}
+					>
+						Подробнее
+					</button>
+				</section>
 
-                <section className="text-center mb-5 bg-warning-subtle p-4 rounded">
-                    <h2 className="mb-3 text-warning">Новости</h2>
-                    <p className="lead mx-auto" style={{ maxWidth: '600px' }}>
-                        Последние события и достижения нашей компании.
-                    </p>
-                    {renderSlider('news')}
-                    <button
-                        className="bg-light btn btn-outline-warning mt-3"
-                        onClick={() => navigate(`/news/`)}
-                    >
-                        Подробнее
-                    </button>
-                </section>
-                <Footer />
-            </div>
-        </div>
-    );
+				{/* Секция "Новости" */}
+				<section className={styles.sectionContainer}>
+					<h2 className={styles.sectionHeading}>Новости</h2>
+					<p className={styles.sectionDescription}>
+						Читайте последние новости и достижения нашей компании: новые
+						проекты, внедрённые инновации и пресс-релизы.
+					</p>
+					{renderSlider('news')}
+					<button
+						className={styles.actionButton}
+						onClick={() => navigate('/news/')}
+					>
+						Подробнее
+					</button>
+				</section>
+
+				<Footer />
+			</div>
+
+			{/* Декоративные круги */}
+			<div
+				className={`${styles['decorative-bg']} ${styles.topLeftCircle}`}
+			></div>
+			<div
+				className={`${styles['decorative-bg']} ${styles.bottomRightCircle}`}
+			></div>
+		</div>
+	)
 }

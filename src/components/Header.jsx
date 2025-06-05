@@ -1,58 +1,100 @@
-import { Link } from 'react-router-dom';
+// Header.jsx
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import styles from '../styles/Header.module.scss';
 
 export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  const toggleMenu = () => {
+    setMenuOpen(prev => !prev);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-      <div className="container">
-        {/* Логотип */}
-        <Link className="navbar-brand fw-bold text-dark" to="/">
-          <img src="/img/logo.png" alt="logo" style={{width: '64px', height: '64px'}}/>
+    <nav className={styles.navbar}>
+      <div className={styles.container}>
+        <Link
+          className={styles.logoLink}
+          to='/'
+          onClick={() => setMenuOpen(false)}
+        >
+          <img src='/img/logo.png' alt='logo' />
         </Link>
 
-        {/* Бургер-кнопка */}
         <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Переключить навигацию"
+          className={styles.toggleButton}
+          onClick={toggleMenu}
+          aria-label='Переключить навигацию'
         >
-          <span className="navbar-toggler-icon"></span>
+          <div className={styles.toggleIcon}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </button>
 
-        {/* Меню */}
-        <div className="collapse navbar-collapse" id="navbarContent">
-          <div className="ms-auto d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3 mt-3 mt-lg-0">
-          <Link to="/" className="text-warning" style={{ textDecoration: 'none' }}>
-              Главная
-            </Link>
-            <Link to="/about" className="text-warning" style={{ textDecoration: 'none' }}>
-              О нас
-            </Link>
-            <Link to="/enterprises" className="text-warning" style={{ textDecoration: 'none' }}>
-              Предприятия
-            </Link>
-            <Link to="/products" className="text-warning" style={{ textDecoration: 'none' }}>
-              Продукция
-            </Link>
-            <Link to="/laboratory" className="text-warning" style={{ textDecoration: 'none' }}>
-              Лаборатория
-            </Link>
-            <Link to="/contacts" className="text-warning" style={{ textDecoration: 'none' }}>
-              Контакты
-            </Link>
-            {/* <Link to="/feedback" className="text-warning" style={{ textDecoration: 'none' }}>
-              Электронное обращение
-            </Link> */}
-            <Link to="/news" className="text-warning" style={{ textDecoration: 'none' }}>
-              Новости
-            </Link>
-            {/* <Link to="/pricelist" className="text-warning" style={{ textDecoration: 'none' }}>
-              Прайс-лист
-            </Link> */}
-          </div>
+        <div
+          className={`${styles.navLinks} ${menuOpen ? styles.open : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          <Link
+            to='/'
+            className={`${styles.navLink} ${
+              pathname === '/' ? styles.activeLink : ''
+            }`}
+          >
+            Главная
+          </Link>
+          {/* остальные ссылки… */}
+          <Link
+            to='/about'
+            className={`${styles.navLink} ${
+              pathname === '/about' ? styles.activeLink : ''
+            }`}
+          >
+            О нас
+          </Link>
+          <Link
+            to='/enterprises'
+            className={`${styles.navLink} ${
+              pathname.startsWith('/enterprises') ? styles.activeLink : ''
+            }`}
+          >
+            Предприятия
+          </Link>
+          <Link
+            to='/products'
+            className={`${styles.navLink} ${
+              pathname.startsWith('/products') ? styles.activeLink : ''
+            }`}
+          >
+            Продукция
+          </Link>
+          <Link
+            to='/laboratory'
+            className={`${styles.navLink} ${
+              pathname.startsWith('/laboratory') ? styles.activeLink : ''
+            }`}
+          >
+            Лаборатория
+          </Link>
+          <Link
+            to='/contacts'
+            className={`${styles.navLink} ${
+              pathname.startsWith('/contacts') ? styles.activeLink : ''
+            }`}
+          >
+            Контакты
+          </Link>
+          <Link
+            to='/news'
+            className={`${styles.navLink} ${
+              pathname.startsWith('/news') ? styles.activeLink : ''
+            }`}
+          >
+            Новости
+          </Link>
         </div>
       </div>
     </nav>
