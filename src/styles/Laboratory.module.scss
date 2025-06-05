@@ -1,0 +1,284 @@
+// ../styles/Laboratory.module.scss
+
+@import './variables'; // Предположим, что базовые переменные находятся в файле variables.scss
+
+.laboratory {
+	background-color: $background-light;
+	color: $text-dark;
+	padding: $section-spacing * 2;
+
+	// Анимация при загрузке страницы
+	animation: fadeInUp $transition-speed ease-out;
+
+	.container {
+		max-width: $container-max-width;
+		margin: 0 auto;
+		padding: $section-spacing;
+		position: relative;
+	}
+
+	// Заголовок страницы
+	.title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin-bottom: $section-spacing;
+		color: $primary-dark;
+		position: relative;
+		display: inline-block;
+
+		// Псевдо-слой для эффекта подчеркнутого текста
+		&::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: -0.25rem;
+			width: 100%;
+			height: 0.25rem;
+			background-color: $primary-color;
+			transform: scaleX(0);
+			transform-origin: left;
+			transition: transform $transition-speed ease-out;
+		}
+
+		&:hover::after {
+			transform: scaleX(1);
+		}
+	}
+
+	// Основной текстовый блок
+	.content {
+		font-size: 1rem;
+		line-height: 1.75;
+		color: $text-muted;
+		margin-bottom: $section-spacing * 2;
+		opacity: 0;
+		animation: fadeIn $transition-speed ease-in $transition-speed forwards;
+
+		// Ссылки внутри текста
+		a {
+			color: $primary-dark;
+			position: relative;
+			text-decoration: none;
+			transition: color $transition-speed ease-out;
+
+			&:hover {
+				color: $primary-color;
+			}
+
+			&:hover::after {
+				width: 100%;
+			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				bottom: -0.1rem;
+				width: 0;
+				height: 1px;
+				background-color: $primary-color;
+				transition: width $transition-speed ease-out;
+			}
+		}
+
+		// Списки внутри текста
+		ul {
+			list-style: none;
+			margin-top: $section-spacing;
+			li {
+				position: relative;
+				padding-left: 1.5rem;
+				margin-bottom: 0.5rem;
+
+				&::before {
+					content: '✔';
+					position: absolute;
+					left: 0;
+					top: 0;
+					color: $primary-color;
+					font-size: 1rem;
+					transform: scale(0);
+					animation: bounceIn 0.4s ease-out forwards;
+				}
+			}
+		}
+	}
+
+	// Секция с картами (например, «Область аккредитации»)
+	.info-section {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: $card-spacing;
+		margin-bottom: $section-spacing * 2;
+
+		.info-card {
+			background-color: $white;
+			border: 1px solid $border-color;
+			border-radius: $border-radius;
+			box-shadow: $box-shadow;
+			padding: $card-spacing;
+			position: relative;
+			overflow: hidden;
+			transition: transform $transition-speed ease,
+				box-shadow $transition-speed ease;
+			cursor: pointer;
+
+			&:hover {
+				transform: translateY(-5px) scale(1.02);
+				box-shadow: 0 1rem 2rem $shadow-medium;
+			}
+
+			// Иконка в углу карточки
+			.icon-wrapper {
+				position: absolute;
+				top: $card-spacing;
+				right: $card-spacing;
+				font-size: 2rem;
+				color: $primary-light;
+				transition: color $transition-speed ease;
+				z-index: 0; // <-- Сделали 0, чтобы иконка была под текстом
+
+				&:hover {
+					color: $primary-color;
+				}
+			}
+
+			h3 {
+				font-size: 1.25rem;
+				color: $primary-dark;
+				margin-bottom: 0.5rem;
+				position: relative; // обязательно, чтобы z-index работал, если потребуется
+				z-index: 1;
+			}
+
+			p {
+				font-size: 0.925rem;
+				color: $text-dark;
+				line-height: 1.6;
+				position: relative; // добавляем позиционирование
+				z-index: 1; // чтобы текст всегда был над иконкой
+
+				&.pInSection {
+					/* здесь position и z-index уже заданы в общем `p` */
+				}
+			}
+		}
+	}
+
+	// Блок с кнопками для действий (например, «Заключить договор»)
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: $section-spacing;
+		margin-top: $section-spacing;
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0.75rem 1.5rem;
+			border: none;
+			border-radius: $border-radius-sm;
+			background-color: $primary-color;
+			color: $white;
+			font-weight: 600;
+			text-decoration: none;
+			transition: background-color $transition-speed ease,
+				transform $transition-speed ease;
+			position: relative;
+			overflow: hidden;
+
+			&:hover {
+				background-color: $primary-dark;
+				transform: translateY(-2px);
+			}
+
+			// Псевдо-слой для эффекта “волны” по клику
+			&::after {
+				content: '';
+				position: absolute;
+				width: 150%;
+				height: 150%;
+				background: rgba(255, 255, 255, 0.3);
+				top: -25%;
+				left: -25%;
+				transform: scale(0);
+				border-radius: 50%;
+				transition: transform 0.5s ease-out;
+			}
+
+			&:active::after {
+				transform: scale(1);
+				transition: 0s;
+			}
+
+			.btn-icon {
+				margin-right: 0.5rem;
+				font-size: 1.25rem;
+				transition: transform $transition-speed ease;
+			}
+			&:hover .btn-icon {
+				transform: rotate(20deg) scale(1.1);
+			}
+		}
+	}
+
+	// Кнопка «Назад» внизу страницы
+	.back-button {
+		display: inline-block;
+		margin-top: $section-spacing * 2;
+		color: $primary-dark;
+		font-weight: 500;
+		text-decoration: none;
+		position: relative;
+		transition: padding-left $transition-speed ease;
+
+		&::before {
+			content: '←';
+			margin-right: 0.5rem;
+			transition: transform $transition-speed ease;
+		}
+
+		&:hover {
+			padding-left: 0.75rem;
+		}
+
+		&:hover::before {
+			transform: translateX(-3px);
+			color: $primary-color;
+		}
+	}
+}
+
+// Ключевые кадры для анимаций
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes bounceIn {
+	0% {
+		transform: scale(0);
+	}
+	60% {
+		transform: scale(1.2);
+	}
+	100% {
+		transform: scale(1);
+	}
+}

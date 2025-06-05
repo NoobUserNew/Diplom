@@ -1,55 +1,84 @@
 @import '../styles/variables.scss';
 
 .productsPage {
-  background-color: $background-light;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+	background-color: $background-light;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 .containerWrapper {
-  max-width: $container-max-width;
-  margin: 0 auto;
-  width: 100%;
+	max-width: $container-max-width;
+	margin: 0 auto;
+	width: 100%;
 }
 
 .heading {
-  font-size: 2rem;
-  font-weight: 700;
-  color: $text-dark;
-  text-align: center;
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.5s ease;
+	font-size: 3rem;
+	color: $primary-dark;
+	margin: 0;
+	display: inline-block;
+	position: relative;
+	line-height: 1.1;
+	opacity: 1;
+	animation: fadeInDown 0.8s ease-out forwards;
+	animation-delay: 0.2s;
+
+	/* Градиентная заливка текста */
+	background: linear-gradient(
+		45deg,
+		$primary-dark,
+		lighten($primary-dark, 25%)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+
+	/* Псевдополоса под заголовком */
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -10px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 0%;
+		height: 4px;
+		background-color: $primary-color;
+		border-radius: $border-radius-sm;
+		animation: expandLine 0.7s ease-out forwards;
+		animation-delay: 0.8s;
+		opacity: 1;
+	}
 }
 
 .spinnerWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem 0;
-  animation: fadeInUp 0.5s ease;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 3rem 0;
+	animation: fadeInUp 0.5s ease;
 }
 
 .alertWrapper {
-  margin: 2rem auto;
-  max-width: 500px;
-  animation: fadeInUp 0.5s ease;
+	margin: 2rem auto;
+	max-width: 500px;
+	animation: fadeInUp 0.5s ease;
 }
 
 .gridRow {
-  margin-left: -0.75rem; // компенсируем padding .colWrapper
-  margin-right: -0.75rem;
-  animation: fadeInUp 0.5s ease;
+	margin-left: -0.75rem; // компенсируем padding .colWrapper
+	margin-right: -0.75rem;
+	animation: fadeInUp 0.5s ease;
 }
 
 // Переиспользуем анимацию
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

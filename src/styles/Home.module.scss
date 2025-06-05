@@ -456,6 +456,10 @@ $desktop-lg: 1440px;
 		}
 	}
 
+	.cardTitle a {
+		color: #ffc107;
+	}
+
 	// Описание карточки
 	.cardDescription {
 		color: $text-muted;
