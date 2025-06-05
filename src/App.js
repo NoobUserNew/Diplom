@@ -6,7 +6,6 @@ import Laboratory from './pages/Laboratory';
 import Contacts from './pages/Contacts';
 import Feedback from './pages/Feedback';
 import News from './pages/News';
-import PriceList from './pages/PriceList';
 import Admin from './pages/Admin';
 import Home from './pages/Home';
 import NewsDetail from './pages/NewsDetail';
@@ -26,7 +25,6 @@ function App() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/news" element={<News />} />
-          <Route path="/pricelist" element={<PriceList />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/news/:id" element={<NewsDetail />} />
         </Routes>
