@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import styles from '../styles/About.module.scss'
+import HomeButton from '../components/HomeButton'
 
 function About() {
 	// Опционально: можно запускать JavaScript, если нужен «on-scroll» эффект активации анимаций.
@@ -177,7 +178,7 @@ function About() {
 						ответственности и успехе!
 					</p>
 				</section>
-
+				<HomeButton href='/' />
 				<Footer />
 			</div>
 		</div>

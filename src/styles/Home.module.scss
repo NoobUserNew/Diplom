@@ -380,6 +380,7 @@ $desktop-lg: 1440px;
 
 	:global(.swiper-pagination) {
 		bottom: -5px;
+		padding: 5px 0px;
 	}
 
 	:global(.swiper-pagination-bullet) {
@@ -450,7 +451,9 @@ $desktop-lg: 1440px;
 		text-decoration: none;
 		transition: color $transition-speed ease, transform $transition-speed ease;
 		display: inline-block;
-
+		overflow-wrap: break-word;
+		word-break: break-word;
+		hyphens: auto;
 		&:hover {
 			color: $primary-color;
 			transform: translateY(-2px);
@@ -468,6 +471,9 @@ $desktop-lg: 1440px;
 		margin-bottom: 0;
 		flex-grow: 1;
 		line-height: 1.4;
+		overflow-wrap: break-word;
+		word-break: break-word;
+		hyphens: auto;
 	}
 
 	&:hover {
@@ -594,7 +600,7 @@ $desktop-lg: 1440px;
 @media (max-width: $mobile) {
 	.heroSection {
 		height: 50vh;
-		min-height: 300px;
+		min-height: 550px;
 		.heroContent {
 			h1 {
 				font-size: 1.75rem;

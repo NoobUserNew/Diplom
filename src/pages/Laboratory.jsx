@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import HomeButton from '../components/HomeButton'
 import styles from '../styles/Laboratory.module.scss'
 
 function Laboratory() {
@@ -168,9 +169,7 @@ function Laboratory() {
 					</ul>
 				</div>
 
-				<a href='/' className={styles['back-button']}>
-					Назад к главной
-				</a>
+				<HomeButton href='/' />
 
 				<Footer />
 			</div>

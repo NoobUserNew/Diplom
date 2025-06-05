@@ -1,6 +1,6 @@
 // src/components/NewsDetail.jsx
 import { useEffect, useState } from 'react'
-import { FaArrowLeft, FaShareAlt } from 'react-icons/fa'
+import { FaShareAlt } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -58,8 +58,8 @@ export default function NewsDetail() {
 			<Header />
 
 			<div className={styles.backWrapper}>
-				<Link className={styles.backLink} to='/'>
-					<FaArrowLeft className={styles.backIcon} /> Назад
+				<Link className={styles.backLink} to='/news'>
+					← Назад
 				</Link>
 			</div>
 

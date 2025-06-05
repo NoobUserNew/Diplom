@@ -3,7 +3,8 @@
 /* Основные настройки страницы */
 .contactsPage {
 	background-color: #f8f9fa; // светлый фон основной области (на случай, если изображение не загрузится)
-	color: #212529; // тёмный текст
+	color: #212529; // тёмный текс
+
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -13,6 +14,7 @@
 .contactSection {
 	position: relative;
 	height: 70vh;
+	min-height: 400px;
 	max-height: 600px;
 	background-image: url('./Contacts.png'); /* Путь к фотографии здания */
 	background-size: cover;
@@ -65,11 +67,13 @@
 		margin: 0 auto;
 	}
 }
-
+.wrapperButton {
+	padding: 0rem 1rem;
+}
 /* Адаптивность */
 @media (max-width: 768px) {
 	.contactSection {
-		height: 60vh;
+		min-height: 450px;
 
 		& .title {
 			font-size: 2rem;
@@ -88,7 +92,7 @@
 
 @media (max-width: 480px) {
 	.contactSection {
-		height: 50vh;
+		min-height: 500px;
 
 		& .title {
 			font-size: 1.75rem;

@@ -5,6 +5,7 @@ import Header from '../components/Header'
 import ProductGrid from '../components/ProductGrid'
 import SearchSortBar from '../components/SearchSortBar'
 import styles from '../styles/Products.module.scss'
+import HomeButton from '../components/HomeButton'
 
 export default function Products() {
 	const [products, setProducts] = useState([])
@@ -137,7 +138,7 @@ export default function Products() {
 						</>
 					)}
 				</Container>
-
+				<HomeButton href='/' />
 				<Footer />
 			</div>
 		</div>
