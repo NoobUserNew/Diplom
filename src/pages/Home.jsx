@@ -81,9 +81,9 @@ export default function Home() {
 						Мы производим высококачественные товары для самых разных отраслей и
 						постоянно развиваемся, чтобы радовать вас новыми решениями.
 					</p>
-					<Link to='/about' className={`ctaButton ${styles.ctaButton}`}>
+					{/* <Link to='/about' className={`ctaButton ${styles.ctaButton}`}>
 						Подробнее о нас
-					</Link>
+					</Link> */}
 				</div>
 			</section>
 
