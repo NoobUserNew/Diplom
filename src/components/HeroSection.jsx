@@ -7,7 +7,7 @@ function HeroSection() {
             <div className={styles.content}>
                 <h1>Добро пожаловать в Брестобхлебопродукт</h1>
                 <p>Мы производим качественную хлебобулочную продукцию для каждого дома.</p>
-                <button className={styles.ctaButton}>Узнать больше</button>
+                
             </div>
         </section>
     );

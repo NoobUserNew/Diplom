@@ -1,0 +1,26 @@
+@import './variables.scss';
+
+.back-button {
+	display: inline-block;
+	margin-top: 1rem * 2;
+	color: $primary-dark;
+	font-weight: 500;
+	text-decoration: none;
+	position: relative;
+	transition: padding-left $transition-speed ease;
+
+	&::before {
+		content: '←';
+		margin-right: 0.5rem;
+		transition: transform $transition-speed ease;
+	}
+
+	&:hover {
+		padding-left: 0.75rem;
+	}
+
+	&:hover::before {
+		transform: translateX(-3px);
+		color: $primary-color;
+	}
+}

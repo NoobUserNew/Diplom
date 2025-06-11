@@ -1,0 +1,42 @@
+@import './variables.scss';
+
+.cardsGrid {
+  display: grid;
+  /* Ширина колонок остаётся прежней, но добавляем выравнивание по высоте */
+  grid-template-columns: 1fr;
+  gap: $card-spacing * 1.5;
+  padding-bottom: $section-spacing * 2;
+  align-items: stretch; // все ячейки грида будут совпадать по высоте
+
+  @media (min-width: $mobile) {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  @media (min-width: $tablet) {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  @media (min-width: $desktop-sm) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+/* Анимация «fade-in» для обёртки каждой карточки */
+.fadeInSection {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity $transition-speed ease-out,
+              transform $transition-speed ease-out;
+}
+
+.isVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Обёртка вокруг каждой карточки внутри грида */
+.cardWrapper {
+  perspective: 1200px;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* растягиваем обёртку на всю высоту ячейки грида */
+}

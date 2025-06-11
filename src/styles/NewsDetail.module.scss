@@ -1,0 +1,194 @@
+/* src/styles/NewsDetail.module.scss */
+@import './variables.scss';
+
+.newsContainer {
+	max-width: $container-max-width;
+	margin: 0 auto;
+	padding: 6rem 1rem;
+	background-color: $background-light;
+	color: $text-dark;
+	border-radius: $border-radius;
+	box-shadow: $box-shadow;
+	position: relative;
+}
+
+.backWrapper {
+	margin-bottom: $section-spacing;
+}
+
+.backLink {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: $primary-dark;
+	font-size: 0.9rem;
+	text-decoration: none;
+	transition: color $transition-speed ease;
+
+	&:hover {
+		color: $primary-color;
+	}
+}
+
+.backIcon {
+	font-size: 1rem;
+}
+
+.errorBox {
+	background-color: lighten($primary-color, 45%);
+	color: darken($primary-color, 40%);
+	border: 1px solid $primary-color;
+	border-radius: $border-radius-sm;
+	padding: 0.75rem 1rem;
+	margin-top: $section-spacing;
+	text-align: center;
+	font-weight: 500;
+	box-shadow: 0 0.5rem 1rem rgba($primary-dark, 0.05);
+}
+
+.loading {
+	text-align: center;
+	padding: $section-spacing 0;
+	color: $text-muted;
+}
+
+.header {
+	text-align: center;
+	margin-bottom: $section-spacing * 1.5;
+
+	.title {
+		font-size: 2rem;
+		font-weight: 700;
+		margin-bottom: 0.5rem;
+		background: linear-gradient(
+			45deg,
+			$primary-dark,
+			lighten($primary-dark, 25%)
+		);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.meta {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		font-size: 0.875rem;
+		color: $text-muted;
+
+		.author,
+		.date {
+			display: flex;
+			align-items: center;
+			gap: 0.25rem;
+		}
+
+		.metaIcon {
+			font-size: 1rem;
+		}
+	}
+}
+
+.imageWrapper {
+	width: 100%;
+	height: 400px; // Используй фиксированную высоту
+	overflow: hidden;
+	border-radius: $border-radius;
+	margin-bottom: $section-spacing * 1.5;
+	background-color: $primary-light;
+
+	.image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; // Заполняет контейнер без искажений
+		object-position: center; // Центрирует картинку
+		transition: transform $transition-speed ease, filter $transition-speed ease;
+		filter: brightness(0.9);
+
+		&:hover {
+			transform: scale(1.05);
+			filter: brightness(1);
+		}
+	}
+}
+
+.actions {
+	display: flex;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-bottom: $section-spacing * 2;
+
+	.actionButton {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		background-color: $primary-color;
+		color: $white;
+		border: none;
+		border-radius: $border-radius-sm;
+		padding: 0.5rem 1rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: background-color $transition-speed ease,
+			transform $transition-speed ease;
+
+		.actionIcon {
+			font-size: 1rem;
+		}
+
+		.actionText {
+			display: none;
+		}
+
+		@media (min-width: $mobile) {
+			.actionText {
+				display: inline;
+			}
+		}
+
+		&:hover {
+			background-color: darken($primary-color, 8%);
+			transform: translateY(-2px);
+		}
+	}
+}
+
+.content {
+	font-size: 1rem;
+	line-height: 1.7;
+	color: $text-dark;
+
+	.paragraph {
+		margin-bottom: $section-spacing * 1.2;
+
+		&:first-child {
+			text-indent: 1.5em;
+		}
+	}
+}
+
+/* Адаптивные стили */
+@media (max-width: $mobile) {
+	.header {
+		.title {
+			font-size: 1.5rem;
+		}
+
+		.meta {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+	}
+
+	.actions {
+		flex-direction: column;
+		gap: 1rem;
+
+		.actionButton {
+			justify-content: center;
+			width: 100%;
+		}
+	}
+}

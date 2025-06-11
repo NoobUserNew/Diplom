@@ -1,0 +1,109 @@
+@import '../styles/variables';
+
+.searchSortRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $card-spacing;
+
+  // Каждый блок (поиска, фильтра, сортировки) будет занимать всю ширину на маленьких экранах,
+  // и по 1/3 ширины на экранах от $tablet и выше.
+  .searchCol,
+  .filterCol,
+  .sortCol {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: $card-spacing;
+
+    @media (min-width: $tablet) {
+      flex: 0 0 33.3333%;
+      max-width: 33.3333%;
+      margin-bottom: 0;
+      padding: 0 ($card-spacing / 2);
+    }
+  }
+
+  // Общие стили для текстовых блоков и кнопок
+  .inputGroupText {
+    background-color: $primary-light;
+    border: 1px solid $border-color;
+    color: $primary-dark;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .searchInputGroup,
+  .filterInputGroup,
+  .sortInputGroup {
+    width: 100%;
+
+    // Стили поля поиска
+    .searchInput {
+      border: 1px solid $border-color;
+      border-right: none;
+      border-top-left-radius: $border-radius-sm;
+      border-bottom-left-radius: $border-radius-sm;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+      transition: border-color $transition-speed ease, box-shadow $transition-speed ease;
+
+      &:focus {
+        border-color: $primary-dark;
+        box-shadow: 0 0 0 0.2rem rgba($primary-dark, 0.25);
+        outline: none;
+      }
+    }
+
+    // Кнопка «поиск»
+    .searchButton {
+      border: 1px solid $border-color;
+      border-left: none;
+      border-top-right-radius: $border-radius-sm;
+      border-bottom-right-radius: $border-radius-sm;
+      background-color: $white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.75rem;
+      transition: background-color $transition-speed ease, color $transition-speed ease;
+
+      &:hover {
+        background-color: $primary-light;
+        color: $primary-dark;
+      }
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba($primary-dark, 0.25);
+      }
+    }
+
+    // DropdownButton обёртка
+    .dropdownButton {
+      border: 1px solid $border-color;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      background-color: $white;
+      color: $text-dark;
+      width: 100%;
+      font-size: 0.9rem;
+      text-align: left;
+      transition: box-shadow $transition-speed ease;
+
+      &:focus,
+      &.show {
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba($primary-dark, 0.25);
+      }
+    }
+
+    // Пункты выпадающего списка
+    .dropdownItem {
+      font-size: 0.9rem;
+
+      &:hover,
+      &:focus {
+        background-color: $primary-light;
+        color: $primary-dark;
+      }
+    }
+  }
+}

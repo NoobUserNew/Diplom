@@ -1,0 +1,28 @@
+@import '../styles/variables.scss';
+
+.colWrapper {
+	padding: 1rem; // увеличили отступы, чтобы карточкам было немного «воздуха»
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+// Дополнительная анимация при отсутствии продуктов
+.noProductsMessage {
+	font-size: 1rem;
+	color: $text-muted;
+	text-align: center;
+	margin: 2rem 0;
+	animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

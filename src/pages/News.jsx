@@ -1,81 +1,36 @@
-import { useState, useEffect } from 'react';
-import { Card, Row, Col, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+// src/pages/News.jsx
+import { useEffect, useState } from 'react'
+import ListPage from '../components/ListPage'
 
 export default function News() {
-    const [slides, setSlides] = useState([]);
-    const [error, setError] = useState(null);
+	const [slides, setSlides] = useState([])
+	const [error, setError] = useState(null)
 
-    const fetchSlides = async () => {
-        try {
-            const res = await fetch('http://localhost:3000/sliders');
-            if (!res.ok) {
-                throw new Error(`HTTP error! Status: ${res.status}`);
-            }
-            const data = await res.json();
-            const newsSlides = data.filter(slide => slide.type === 'news');
-            newsSlides.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            setSlides(newsSlides.slice(0, 7));
-            setError(null);
-        } catch (err) {
-            console.error('Failed to fetch slides:', err);
-            setError('Не удалось загрузить данные. Проверьте, работает ли сервер.');
-        }
-    };
+	useEffect(() => {
+		async function fetchSlides() {
+			try {
+				const res = await fetch('http://localhost:3000/sliders')
+				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`)
+				const data = await res.json()
 
-    useEffect(() => {
-        fetchSlides();
-    }, []);
+				// Берём только те, у которых type='news', сортируем по дате (новые сверху), и отрезаем 7 штук
+				const newsSlides = data
+					.filter(slide => slide.type === 'news')
+					.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+					.slice(0, 7)
 
-    const newsSlides = slides;
+				setSlides(newsSlides)
+				setError(null)
+			} catch (err) {
+				console.error('Failed to fetch slides:', err)
+				setError('Не удалось загрузить данные. Проверьте, работает ли сервер.')
+			}
+		}
 
-    return (
-        <div className='bg-light text-dark'>
-            <div className='container my-5'>
-                <Header />
-                <Container className="my-5">
-                    <h1 className="mb-4 text-center">Новости</h1>
-                    {error && <div className="alert alert-danger">{error}</div>}
-                    <Row>
-                        {newsSlides.map((slide) => (
-                            <Col key={slide.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                                <Card className="h-100 shadow-sm">
-                                    <Card.Img
-                                        variant="top"
-                                        src={slide.imageUrl}
-                                        style={{ height: '200px', objectFit: 'cover' }}
-                                        alt={slide.title}
-                                    />
-                                    <Card.Body className="d-flex flex-column">
-                                        <Card.Title
-                                            className="text-truncate"
-                                            title={slide.title}
-                                            style={{ wordBreak: 'break-word' }} // Добавляем перенос слов
-                                        >
-                                            {slide.title.length > 30 ? slide.title.substring(0, 30) + '...' : slide.title}
-                                        </Card.Title>
-                                        {slide.description && (
-                                            <Card.Text className="text-muted" style={{ fontSize: '0.9rem' }}>
-                                                {slide.description.length > 100
-                                                    ? slide.description.substring(0, 100) + '...'
-                                                    : slide.description}
-                                            </Card.Text>
-                                        )}
-                                        <div className="mt-auto">
-                                            <Link to={`/news/${slide.id}`} className="btn btn-warning w-100">
-                                                Подробнее
-                                            </Link>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                </Container>
-                <Footer/>
-            </div>
-        </div>
-    );
+		fetchSlides()
+	}, [])
+
+	return (
+		<ListPage title='Новости' items={slides} error={error} routePrefix='news' />
+	)
 }
