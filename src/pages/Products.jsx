@@ -41,6 +41,7 @@ export default function Products() {
 			setLoading(false)
 		}
 	}
+	fetchProducts()
 	}, [API_URL])
 
 	// 2. Список уникальных manufacturer (исключая пустые)
