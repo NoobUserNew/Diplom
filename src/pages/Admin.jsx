@@ -102,8 +102,8 @@ export default function Admin() {
 		setShowLogin(true)
 		setSlides([])
 		setEnterprises([])
-		setProducts([])
-		setNews([])
+		// setProducts([])
+		// setNews([])
 		setError(null)
 	}
 
