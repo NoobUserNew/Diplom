@@ -24,8 +24,8 @@ export default function Admin() {
 	const [editingSlide, setEditingSlide] = useState(null)
 	const [successMessage, setSuccessMessage] = useState('')
 	const [enterprises, setEnterprises] = useState([])
-	const [products, setProducts] = useState([])
-	const [news, setNews] = useState([])
+	// const [products, setProducts] = useState([])
+	// const [news, setNews] = useState([])
 	const [error, setError] = useState(null)
 	const [isAuthenticated, setIsAuthenticated] = useState(
 		!!localStorage.getItem('token')
