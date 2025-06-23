@@ -70,7 +70,7 @@ export default function Admin() {
 			fetchSlides()
 			fetchEnterprises()
 		}
-	}, [isAuthenticated])
+	}, [[fetchEnterprises, fetchSlides]])
 
 	const handleLogin = async e => {
 		e.preventDefault()
