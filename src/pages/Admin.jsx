@@ -70,7 +70,8 @@ export default function Admin() {
 			fetchSlides()
 			fetchEnterprises()
 		}
-	}, [[fetchEnterprises, fetchSlides]])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [[isAuthenticated]])
 
 	const handleLogin = async e => {
 		e.preventDefault()
