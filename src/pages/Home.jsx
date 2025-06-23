@@ -17,7 +17,7 @@ export default function Home() {
 		fetch(`${API_URL}/sliders`)
 			.then(res => res.json())
 			.then(data => setSlides(data))
-	}, [])
+	}, [API_URL])
 
 	const renderSlider = type => (
 		<Swiper

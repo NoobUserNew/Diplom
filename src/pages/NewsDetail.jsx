@@ -27,7 +27,7 @@ export default function NewsDetail() {
 			}
 		}
 		fetchNewsItem()
-	}, [id])
+	}, [API_URL, id])
 
 	if (error) {
 		return (

@@ -41,7 +41,7 @@ export default function Products() {
 
 	useEffect(() => {
 		fetchProducts()
-	}, [])
+	}, [API_URL])
 
 	// 2. Список уникальных manufacturer (исключая пустые)
 	const manufacturers = Array.from(

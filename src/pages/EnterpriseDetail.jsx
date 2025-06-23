@@ -31,7 +31,7 @@ export default function EnterpriseDetail() {
 			}
 		}
 		fetchEnterprise()
-	}, [id])
+	}, [API_URL, id])
 
 	if (error) {
 		return (

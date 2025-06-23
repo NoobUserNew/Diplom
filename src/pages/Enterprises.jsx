@@ -30,7 +30,7 @@ export default function Enterprises() {
     }
 
     fetchSlides();
-  }, []);
+  }, [API_URL]);
 
   return (
     <ListPage

@@ -28,7 +28,7 @@ export default function News() {
 		}
 
 		fetchSlides()
-	}, [])
+	}, [API_URL])
 
 	return (
 		<ListPage title='Новости' items={slides} error={error} routePrefix='news' />
