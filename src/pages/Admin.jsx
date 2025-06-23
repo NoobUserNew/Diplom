@@ -27,9 +27,6 @@ export default function Admin() {
 	const [products, setProducts] = useState([])
 	const [news, setNews] = useState([])
 	const [error, setError] = useState(null)
-	const [activeTab, setActiveTab] = useState('enterprises')
-	const [showModal, setShowModal] = useState(false)
-	const [editItem, setEditItem] = useState(null)
 	const [isAuthenticated, setIsAuthenticated] = useState(
 		!!localStorage.getItem('token')
 	)
@@ -48,7 +45,7 @@ export default function Admin() {
 			setSlides(data)
 		} catch (err) {
 			console.error('Fetch error:', err)
-			setError(`Ошибка загрузки слайдов: ${err.message}`)
+			setError(`Ошибка загрузки: ${err.message}`)
 		}
 	}
 
@@ -218,11 +215,11 @@ export default function Admin() {
 			setStorage('')
 			setEnergy('')
 			fetchSlides()
-			showSuccess('Слайд успешно добавлен!')
+			showSuccess('Успешно добавлено!')
 		} else {
 			const error = await sliderResponse.json()
 			setSuccessMessage(
-				`Ошибка при создании слайда: ${error.error || 'Неизвестная ошибка'}`
+				`Ошибка при создании: ${error.error || 'Неизвестная ошибка'}`
 			)
 		}
 	}
@@ -255,7 +252,7 @@ export default function Admin() {
 		}
 
 		await fetchSlides()
-		showSuccess('Слайд успешно удален!')
+		showSuccess('Успешно удалено!')
 	}
 
 	const handleUpdate = async e => {
@@ -443,11 +440,11 @@ export default function Admin() {
 		if (sliderResponse.ok) {
 			setEditingSlide(null)
 			fetchSlides()
-			showSuccess('Слайд успешно обновлен!')
+			showSuccess('Успешно обновлено!')
 		} else {
 			const error = await sliderResponse.json()
 			setSuccessMessage(
-				`Ошибка при обновлении слайда: ${error.error || 'Неизвестная ошибка'}`
+				`Ошибка при обновлении: ${error.error || 'Неизвестная ошибка'}`
 			)
 		}
 	}
@@ -744,7 +741,7 @@ export default function Admin() {
 				</Form.Group>
 				<div className='col-12'>
 					<Button type='submit' variant='primary'>
-						Добавить слайд
+						Добавить
 					</Button>
 				</div>
 			</Form>

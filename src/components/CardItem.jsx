@@ -65,3 +65,5 @@ CardItem.propTypes = {
   }).isRequired,
   routePrefix: PropTypes.string.isRequired,
 };
+
+// Теперь item.id — это id предприятия (ref_id из слайдера)

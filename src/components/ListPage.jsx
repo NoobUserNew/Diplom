@@ -42,7 +42,7 @@ export default function ListPage({ title, items, error, routePrefix }) {
 				{/* Блок ошибки (передаётся сверху) */}
 				{error && <div className={styles.errorBox}>{error}</div>}
 
-				{/* Сетка карточек (переданные items) */}
+				{/* Сетка карточек (переданные items, теперь id = id предприятия) */}
 				<CardGrid items={items} routePrefix={routePrefix} />
 				<HomeButton href='/' />
 				<Footer />

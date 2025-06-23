@@ -34,6 +34,7 @@ export default function Home() {
 		>
 			{slides
 				.filter(slide => slide.type === type)
+				.slice(0, type === 'product' ? 7 : undefined)
 				.map(slide => (
 					<SwiperSlide key={slide.id}>
 						<div className={styles.slideCard}>

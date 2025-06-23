@@ -14,9 +14,13 @@ export default function Enterprises() {
         const data = await res.json();
 
         // Берём только первые 7 с type 'enterprise'
+        // Формируем массив с правильным id (id предприятия)
         const enterpriseSlides = data
           .filter((slide) => slide.type === 'enterprise')
-          .slice(0, 7);
+          .map((slide) => ({
+            ...slide,
+            id: slide.ref_id, // теперь id = id предприятия
+          }));
         setSlides(enterpriseSlides);
         setError(null);
       } catch (err) {

@@ -80,7 +80,7 @@ export default function NewsDetail() {
 					)}
 				</div>
 			</header>
-
+ 
 			{imageUrl && (
 				<div className={styles.imageWrapper}>
 					<img src={imageUrl} alt={title} className={styles.image} />

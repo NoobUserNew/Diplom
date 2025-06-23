@@ -1,6 +1,6 @@
 @import '../styles/variables.scss'; // путь к вашему файлу с переменными
 
-// Анимации
+// Анимации 
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -173,7 +173,7 @@
 
   .modalImg {
     max-width: 100%;
-    height: auto;
+    height: 20rem;
     border-radius: $border-radius-sm;
     transition: transform $transition-speed ease, box-shadow $transition-speed ease;
     &:hover {
