@@ -26,6 +26,7 @@ export default function Admin() {
 	const [enterprises, setEnterprises] = useState([])
 	// const [products, setProducts] = useState([])
 	// const [news, setNews] = useState([])
+	const API_URL = process.env.REACT_APP_API_URL
 	const [error, setError] = useState(null)
 	const [isAuthenticated, setIsAuthenticated] = useState(
 		!!localStorage.getItem('token')
@@ -36,7 +37,7 @@ export default function Admin() {
 	const fetchSlides = async () => {
 		if (!isAuthenticated) return
 		try {
-			const res = await fetch('http://localhost:3000/sliders', {
+			const res = await fetch(`{$API_URL}/sliders`, {
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 			})
 			if (!res.ok)
@@ -52,7 +53,7 @@ export default function Admin() {
 	const fetchEnterprises = async () => {
 		if (!isAuthenticated) return
 		try {
-			const res = await fetch('http://localhost:3000/enterprises', {
+			const res = await fetch('{$API_URL}/enterprises', {
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 			})
 			if (!res.ok)
@@ -76,7 +77,7 @@ export default function Admin() {
 	const handleLogin = async e => {
 		e.preventDefault()
 		try {
-			const response = await fetch('http://localhost:3000/login', {
+			const response = await fetch('{$API_URL}/login', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(loginData),
@@ -122,7 +123,7 @@ export default function Admin() {
 		let refId
 		let entityResponse
 		if (type === 'enterprise') {
-			entityResponse = await fetch('http://localhost:3000/enterprises', {
+			entityResponse = await fetch('{$API_URL}/enterprises', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ export default function Admin() {
 				}),
 			})
 		} else if (type === 'product') {
-			entityResponse = await fetch('http://localhost:3000/products', {
+			entityResponse = await fetch('{$API_URL}/products', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ export default function Admin() {
 				}),
 			})
 		} else if (type === 'news') {
-			entityResponse = await fetch('http://localhost:3000/news', {
+			entityResponse = await fetch('{$API_URL}/news', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -188,7 +189,7 @@ export default function Admin() {
 
 		await new Promise(resolve => setTimeout(resolve, 200))
 
-		const sliderResponse = await fetch('http://localhost:3000/sliders', {
+		const sliderResponse = await fetch('{$API_URL}/sliders', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -230,23 +231,23 @@ export default function Admin() {
 		const slide = slides.find(s => s.id === id)
 		if (!slide) return
 
-		await fetch(`http://localhost:3000/sliders/${id}`, {
+		await fetch(`{$API_URL}/sliders/${id}`, {
 			method: 'DELETE',
 			headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 		})
 
 		if (slide.type === 'enterprise') {
-			await fetch(`http://localhost:3000/enterprises/${slide.ref_id}`, {
+			await fetch(`{$API_URL}/enterprises/${slide.ref_id}`, {
 				method: 'DELETE',
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 			})
 		} else if (slide.type === 'product') {
-			await fetch(`http://localhost:3000/products/${slide.ref_id}`, {
+			await fetch(`{$API_URL}/products/${slide.ref_id}`, {
 				method: 'DELETE',
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 			})
 		} else if (slide.type === 'news') {
-			await fetch(`http://localhost:3000/news/${slide.ref_id}`, {
+			await fetch(`{$API_URL}/news/${slide.ref_id}`, {
 				method: 'DELETE',
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 			})
@@ -268,7 +269,7 @@ export default function Admin() {
 		if (originalType !== editingSlide.type) {
 			let entityResponse
 			if (editingSlide.type === 'enterprise') {
-				entityResponse = await fetch('http://localhost:3000/enterprises', {
+				entityResponse = await fetch('{$API_URL}/enterprises', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -282,7 +283,7 @@ export default function Admin() {
 					}),
 				})
 			} else if (editingSlide.type === 'product') {
-				entityResponse = await fetch('http://localhost:3000/products', {
+				entityResponse = await fetch('{$API_URL}/products', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -305,7 +306,7 @@ export default function Admin() {
 					}),
 				})
 			} else if (editingSlide.type === 'news') {
-				entityResponse = await fetch('http://localhost:3000/news', {
+				entityResponse = await fetch('{$API_URL}/news', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -329,7 +330,7 @@ export default function Admin() {
 
 				if (originalType === 'enterprise') {
 					await fetch(
-						`http://localhost:3000/enterprises/${editingSlide.ref_id}`,
+						`{$API_URL}/enterprises/${editingSlide.ref_id}`,
 						{
 							method: 'DELETE',
 							headers: {
@@ -338,14 +339,14 @@ export default function Admin() {
 						}
 					)
 				} else if (originalType === 'product') {
-					await fetch(`http://localhost:3000/products/${editingSlide.ref_id}`, {
+					await fetch(`{$API_URL}/products/${editingSlide.ref_id}`, {
 						method: 'DELETE',
 						headers: {
 							Authorization: `Bearer ${localStorage.getItem('token')}`,
 						},
 					})
 				} else if (originalType === 'news') {
-					await fetch(`http://localhost:3000/news/${editingSlide.ref_id}`, {
+					await fetch(`{$API_URL}/news/${editingSlide.ref_id}`, {
 						method: 'DELETE',
 						headers: {
 							Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -364,7 +365,7 @@ export default function Admin() {
 		} else {
 			if (editingSlide.type === 'enterprise') {
 				await fetch(
-					`http://localhost:3000/enterprises/${editingSlide.ref_id}`,
+					`{$API_URL}/enterprises/${editingSlide.ref_id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -380,7 +381,7 @@ export default function Admin() {
 					}
 				)
 			} else if (editingSlide.type === 'product') {
-				await fetch(`http://localhost:3000/products/${editingSlide.ref_id}`, {
+				await fetch(`{$API_URL}/products/${editingSlide.ref_id}`, {
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
@@ -403,7 +404,7 @@ export default function Admin() {
 					}),
 				})
 			} else if (editingSlide.type === 'news') {
-				await fetch(`http://localhost:3000/news/${editingSlide.ref_id}`, {
+				await fetch(`{$API_URL}/news/${editingSlide.ref_id}`, {
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
@@ -423,7 +424,7 @@ export default function Admin() {
 		await new Promise(resolve => setTimeout(resolve, 200))
 
 		const sliderResponse = await fetch(
-			`http://localhost:3000/sliders/${editingSlide.id}`,
+			`{$API_URL}/sliders/${editingSlide.id}`,
 			{
 				method: 'PUT',
 				headers: {

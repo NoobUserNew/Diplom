@@ -14,7 +14,7 @@ export default function NewsDetail() {
 	useEffect(() => {
 		const fetchNewsItem = async () => {
 			try {
-				const res = await fetch(`http://localhost:3000/sliders/${id}`)
+				const res = await fetch(`{$API_URL}/sliders/${id}`)
 				if (!res.ok) {
 					throw new Error(`HTTP error! Status: ${res.status}`)
 				}

@@ -14,7 +14,7 @@ export default function Home() {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		fetch('http://localhost:3000/sliders')
+		fetch('{$API_URL}/sliders')
 			.then(res => res.json())
 			.then(data => setSlides(data))
 	}, [])

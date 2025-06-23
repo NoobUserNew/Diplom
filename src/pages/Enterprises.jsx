@@ -9,7 +9,7 @@ export default function Enterprises() {
   useEffect(() => {
     async function fetchSlides() {
       try {
-        const res = await fetch('http://localhost:3000/sliders');
+        const res = await fetch('{$API_URL}/sliders');
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
 

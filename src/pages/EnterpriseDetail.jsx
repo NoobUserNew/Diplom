@@ -14,7 +14,7 @@ export default function EnterpriseDetail() {
 		const fetchEnterprise = async () => {
 			setLoading(true)
 			try {
-				const res = await fetch(`http://localhost:3000/enterprises/${id}`)
+				const res = await fetch(`{$API_URL}/enterprises/${id}`)
 				if (!res.ok) {
 					throw new Error(`HTTP error! Status: ${res.status}`)
 				}

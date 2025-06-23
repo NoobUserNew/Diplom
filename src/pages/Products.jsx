@@ -20,7 +20,7 @@ export default function Products() {
 	// 1. Получаем все продукты с сервера
 	const fetchProducts = async () => {
 		try {
-			const res = await fetch('http://localhost:3000/products', {
+			const res = await fetch('{$API_URL}/products', {
 				headers: {
 					// Authorization: "Bearer dummy-token-123",
 				},
