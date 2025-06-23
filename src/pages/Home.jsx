@@ -97,7 +97,7 @@ export default function Home() {
 						продукции для различных отраслей. Мы ценим каждого клиента и
 						гарантируем надёжность в каждом изделии.
 					</p>
-					<Link to='/about' className={styles.actionButton}>
+					<Link to='https://diplom-production-810a.up.railway.app/about' className={styles.actionButton}>
 						Узнать больше
 					</Link>
 				</section>
