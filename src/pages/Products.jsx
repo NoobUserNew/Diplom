@@ -11,7 +11,7 @@ export default function Products() {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
-
+	const API_URL = process.env.REACT_APP_API_URL
 	// Состояния для поиска/фильтра/сортировки
 	const [searchName, setSearchName] = useState('') // Поиск по name
 	const [manufacturerFilter, setManufacturerFilter] = useState(null) // null | 'NO_MANUFACTURER' | строка
@@ -20,7 +20,7 @@ export default function Products() {
 	// 1. Получаем все продукты с сервера
 	const fetchProducts = async () => {
 		try {
-			const res = await fetch('{$API_URL}/products', {
+			const res = await fetch(`${API_URL}/products`, {
 				headers: {
 					// Authorization: "Bearer dummy-token-123",
 				},

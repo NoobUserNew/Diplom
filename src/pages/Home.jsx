@@ -12,9 +12,9 @@ import styles from '../styles/Home.module.scss'
 export default function Home() {
 	const [slides, setSlides] = useState([])
 	const navigate = useNavigate()
-
+	const API_URL = process.env.REACT_APP_API_URL
 	useEffect(() => {
-		fetch('{$API_URL}/sliders')
+		fetch(`${API_URL}/sliders`)
 			.then(res => res.json())
 			.then(data => setSlides(data))
 	}, [])

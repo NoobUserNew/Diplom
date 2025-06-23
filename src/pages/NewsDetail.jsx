@@ -10,11 +10,11 @@ export default function NewsDetail() {
 	const { id } = useParams()
 	const [newsItem, setNewsItem] = useState(null)
 	const [error, setError] = useState(null)
-
+	const API_URL = process.env.REACT_APP_API_URL
 	useEffect(() => {
 		const fetchNewsItem = async () => {
 			try {
-				const res = await fetch(`{$API_URL}/sliders/${id}`)
+				const res = await fetch(`${API_URL}/sliders/${id}`)
 				if (!res.ok) {
 					throw new Error(`HTTP error! Status: ${res.status}`)
 				}

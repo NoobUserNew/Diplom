@@ -5,11 +5,11 @@ import ListPage from '../components/ListPage'
 export default function News() {
 	const [slides, setSlides] = useState([])
 	const [error, setError] = useState(null)
-
+	const API_URL = process.env.REACT_APP_API_URL
 	useEffect(() => {
 		async function fetchSlides() {
 			try {
-				const res = await fetch('{$API_URL}/sliders')
+				const res = await fetch(`${API_URL}/sliders`)
 				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`)
 				const data = await res.json()
 
