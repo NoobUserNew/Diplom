@@ -18,7 +18,10 @@ export default function Products() {
 	const [sortOrder, setSortOrder] = useState(null) // null | 'asc' | 'desc'
 
 	// 1. Получаем все продукты с сервера
-	const fetchProducts = async () => {
+	
+
+	useEffect(() => {
+		const fetchProducts = async () => {
 		try {
 			const res = await fetch(`${API_URL}/products`, {
 				headers: {
@@ -38,10 +41,7 @@ export default function Products() {
 			setLoading(false)
 		}
 	}
-
-	useEffect(() => {
-		fetchProducts()
-	}, [API_URL, fetchProducts])
+	}, [API_URL])
 
 	// 2. Список уникальных manufacturer (исключая пустые)
 	const manufacturers = Array.from(
